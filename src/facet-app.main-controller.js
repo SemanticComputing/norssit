@@ -13,10 +13,12 @@
     /*
     * Controller for the results view.
     */
-    .controller('MainController', function ($scope, _, RESULTS_PER_PAGE,
+    .controller('MainController', function($scope, $uibModal, _, RESULTS_PER_PAGE,
                 norssitService, NgTableParams, FacetHandler, facetUrlStateHandlerService) {
 
         var vm = this;
+
+        vm.openPage = openPage;
 
         var initListener = $scope.$on('sf-initial-constraints', function(event, config) {
             updateResults(event, config);
@@ -40,6 +42,16 @@
                     getData: getData
                 }
             );
+        }
+
+        function openPage(person) {
+            $uibModal.open({
+                component: 'registerPageModal',
+                size: 'lg',
+                resolve: {
+                    person: function() { return person; }
+                }
+            });
         }
 
         function getFacetOptions() {

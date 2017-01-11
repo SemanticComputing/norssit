@@ -1,6 +1,6 @@
 <div>
-    <h1 translate>APP_TITLE</h1>
-    <p translate>HELP_TEXT</p>
+    <h1>Norssit</h1>
+    <p>Norssimatrikkelihaku. Voit rajata tulosta tekemällä valintoja suodattimista ja selata henkilöihin liittyvää tietoa linkkien kautta.</p>
 </div>
 
 <table class="table casualty-table ng-table-responsive" ng-table="vm.tableParams">
@@ -13,38 +13,34 @@
     <col width="7%" />
     <col width="10%" />
     <col width="10%" />
-    <col width="10%" />
-    <col width="25%" />
+    <col width="35%" />
   </colgroup>
-  <tr ng-show="!vm.isLoadingResults" ng-repeat="person in $data">
-    <td data-title="'NAME' | translate">
+  <tr ng-click="::vm.openPage(person)" ng-show="!vm.isLoadingResults" ng-repeat="person in $data">
+    <td data-title="'Nimi'">
       {{ ::person.givenName }} {{ ::person.familyName }}
     </td>
-    <td data-title="'ENROLLMENT_YEAR' | translate">
+    <td data-title="'Aloittanut'">
       {{ ::person.enrollmentYear }}
     </td>
-    <td data-title="'MATRICULATION_YEAR' | translate">
+    <td data-title="'Valmistunut'">
       {{ ::person.matriculationYear }}
     </td>
-    <td data-title="'BIRTH_PLACE' | translate">
+    <td data-title="'Syntymäpaikka'">
       {{ ::person.birthPlace }}
     </td>
-    <td data-title="'TIME_OF_BIRTH' | translate">
+    <td data-title="'Syntymäpäivä'">
       {{ ::person.birthDate }}
     </td>
-    <td data-title="'TIME_OF_DEATH' | translate">
+    <td data-title="'Kuollut'">
       {{ ::person.deathDate }}
     </td>
-    <td data-title="'HOBBY' | translate">
+    <td data-title="'Harrastus'">
       {{ ::person.hobby | join:', ' }}
     </td>
-    <td data-title="'RELATED_NORSSI' | translate">
+    <td data-title="'Sukulaisnorssi'">
       {{ ::person.relatedNorssi | join:', ' }}
     </td>
-    <td data-title="'PAGE' | translate">
-      {{ ::person.page }} {{ ::person.pageImageUrl }}
-    </td>
-    <td data-title="'ENTRY_TEXT' | translate">
+    <td data-title="'Matrikkeliteksti'">
       {{ ::person.entryText }}
     </td>
   </tr>

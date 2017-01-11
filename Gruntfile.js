@@ -100,8 +100,8 @@ module.exports = function (grunt) {
                 connect.static('./src/css')
               ),
               connect().use(
-                '/norssit/lang',
-                connect.static('./src/lang')
+                '/pageimages',
+                connect.static('./pageimages')
               ),
               connect.static(appConfig.app)
             ];
@@ -379,7 +379,7 @@ module.exports = function (grunt) {
     cdnify: {
         dist: {
             options: {
-                base: 'norssit/'
+                base: '/'
             },
             files: [{
                 expand: true,
@@ -495,8 +495,7 @@ module.exports = function (grunt) {
     'uglify',
     'filerev',
     'usemin',
-    'htmlmin',
-    'cdnify'
+    'htmlmin'
   ]);
 
   grunt.registerTask('default', [

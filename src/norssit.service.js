@@ -11,7 +11,7 @@
     .service('norssitService', norssitService);
 
     /* @ngInject */
-    function norssitService($translate, _, FacetResultHandler) {
+    function norssitService($q, _, FacetResultHandler) {
 
         /* Public API */
 
@@ -32,36 +32,36 @@
             entryText: {
                 facetId: 'entryText',
                 predicate: '<http://ldf.fi/schema/person_registry/entryText>',
-                name: 'SEARCH',
+                name: 'Haku',
                 enabled: true
             },
             familyName: {
                 facetId: 'familyName',
                 predicate: '<http://schema.org/familyName>',
-                name: 'FAMILY_NAME'
+                name: 'Sukunimi'
             },
             birthPlace: {
                 facetId: 'birthPlace',
                 predicate: '<http://schema.org/birthPlace>',
-                name: 'BIRTH_PLACE',
+                name: 'Syntymäpaikka',
                 enabled: true
             },
             enrollmentYear: {
                 facetId: 'enrollmentYear',
                 predicate: '<http://ldf.fi/schema/person_registry/enrollmentYear>',
-                name: 'ENROLLMENT_YEAR',
+                name: 'Aloittamisvuosi',
                 enabled: true
             },
             matriculationYear: {
                 facetId: 'matriculationYear',
                 predicate: '<http://ldf.fi/schema/person_registry/matriculationYear>',
-                name: 'MATRICULATION_YEAR',
+                name: 'Valmistumisvuosi',
                 enabled: true
             },
             hobby: {
                 facetId: 'hobby',
                 predicate: '<http://schema.org/hobby>',
-                name: 'HOBBY'
+                name: 'Harrastus'
             }
         };
 
@@ -93,7 +93,7 @@
         '  OPTIONAL { ?id schema:deathDate ?deathDate . }' +
         '  OPTIONAL { ?id schema:hobby ?hobby . }' +
         '  OPTIONAL { ?id person_registry:pageNumber ?pageNumber . }' +
-        '  OPTIONAL { ?id person_registry:pageImageUrl ?pageImageUrl . }' +
+        '  OPTIONAL { ?id person_registry:pageImageURL ?pageImageURL . }' +
         '  OPTIONAL { ?id person_registry:relatedNorssi ?relatedNorssi . }' +
         '  OPTIONAL { ?id person_registry:enrollmentYear ?enrollmentYear . }' +
         '  OPTIONAL { ?id person_registry:matriculationYear ?matriculationYear . }' +
@@ -129,14 +129,8 @@
 
         function getFacets() {
             // Translate the facet headers.
-            return $translate(_.map(facets, 'name'))
-            .then(function(translations) {
-                var facetsCopy = angular.copy(facets);
-                _.forOwn(facetsCopy, function(val) {
-                    val.name = translations[val.name];
-                });
-                return facetsCopy;
-            });
+            var facetsCopy = angular.copy(facets);
+            return $q.when(facetsCopy);
         }
 
         function getFacetOptions() {

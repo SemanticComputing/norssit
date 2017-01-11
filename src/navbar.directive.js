@@ -6,7 +6,7 @@
     .directive('wsNavbar', wsNavbarDirective);
 
     /* @ngInject */
-    function wsNavbarDirective($templateRequest, $compile, $translate, $uibModal) {
+    function wsNavbarDirective($templateRequest, $compile, $uibModal) {
         return {
             link: link,
             controller: NavbarController,
@@ -14,11 +14,8 @@
         };
 
         function link(scope, elem) {
-            return $translate.onReady()
-            .then(function() {
-                var lang = $translate.use();
-                return $templateRequest('/page-templates/navbar-' + lang + '.html');
-            }).then(function(template) {
+            return $templateRequest('/page-templates/navbar-fi.html')
+            .then(function(template) {
                 elem.html(template);
                 return $templateRequest('views/subnavbar.html');
             }).then(function(template) {
@@ -31,10 +28,6 @@
             var vm = this;
 
             vm.showHelp = showHelp;
-
-            $translate.onReady().then(function() {
-                vm.lang = $translate.use();
-            });
 
             function showHelp() {
                 $uibModal.open({
