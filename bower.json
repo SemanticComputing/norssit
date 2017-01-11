@@ -1,0 +1,30 @@
+{
+  "name": "norssit-proto",
+  "description": "",
+  "main": "",
+  "authors": [
+    "Erkki Heino <erkki.heino@aalto.fi>"
+  ],
+  "license": "MIT",
+  "moduleType": [],
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "^1.6.1",
+    "angular-ui-router": "^1.0.0-rc.1",
+    "ng-table-bundle": "^4.0.0",
+    "angular-translate": "^2.13.1",
+    "angular-translate-loader-static-files": "^2.13.1",
+    "sparql-faceter": "^1.3.2",
+    "bootstrap": "^3.3.7",
+    "lodash": "^4.17.4",
+    "angular-filter": "^0.5.14"
+  }
+}

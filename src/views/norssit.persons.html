@@ -1,0 +1,52 @@
+<div>
+    <h1 translate>APP_TITLE</h1>
+    <p translate>HELP_TEXT</p>
+</div>
+
+<table class="table casualty-table ng-table-responsive" ng-table="vm.tableParams">
+  <colgroup>
+    <col width="15%" />
+    <col width="5%" />
+    <col width="5%" />
+    <col width="10%" />
+    <col width="7%" />
+    <col width="7%" />
+    <col width="10%" />
+    <col width="10%" />
+    <col width="10%" />
+    <col width="25%" />
+  </colgroup>
+  <tr ng-show="!vm.isLoadingResults" ng-repeat="person in $data">
+    <td data-title="'NAME' | translate">
+      {{ ::person.givenName }} {{ ::person.familyName }}
+    </td>
+    <td data-title="'ENROLLMENT_YEAR' | translate">
+      {{ ::person.enrollmentYear }}
+    </td>
+    <td data-title="'MATRICULATION_YEAR' | translate">
+      {{ ::person.matriculationYear }}
+    </td>
+    <td data-title="'BIRTH_PLACE' | translate">
+      {{ ::person.birthPlace }}
+    </td>
+    <td data-title="'TIME_OF_BIRTH' | translate">
+      {{ ::person.birthDate }}
+    </td>
+    <td data-title="'TIME_OF_DEATH' | translate">
+      {{ ::person.deathDate }}
+    </td>
+    <td data-title="'HOBBY' | translate">
+      {{ ::person.hobby | join:', ' }}
+    </td>
+    <td data-title="'RELATED_NORSSI' | translate">
+      {{ ::person.relatedNorssi | join:', ' }}
+    </td>
+    <td data-title="'PAGE' | translate">
+      {{ ::person.page }} {{ ::person.pageImageUrl }}
+    </td>
+    <td data-title="'ENTRY_TEXT' | translate">
+      {{ ::person.entryText }}
+    </td>
+  </tr>
+</table>
+<img class="loading-img" src="images/loading-lg.gif" ng-if="vm.isLoadingResults"></img>
