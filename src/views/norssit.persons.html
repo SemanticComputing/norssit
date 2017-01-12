@@ -1,0 +1,48 @@
+<div>
+    <h1>Norssit</h1>
+    <p>Norssimatrikkelihaku. Voit rajata tulosta tekemällä valintoja suodattimista ja selata henkilöihin liittyvää tietoa linkkien kautta.</p>
+</div>
+
+<table class="table casualty-table ng-table-responsive" ng-table="vm.tableParams">
+  <colgroup>
+    <col width="15%" />
+    <col width="5%" />
+    <col width="5%" />
+    <col width="10%" />
+    <col width="7%" />
+    <col width="7%" />
+    <col width="10%" />
+    <col width="10%" />
+    <col width="35%" />
+  </colgroup>
+  <tr ng-click="::vm.openPage(person)" ng-show="!vm.isLoadingResults" ng-repeat="person in $data">
+    <td data-title="'Nimi'">
+      {{ ::person.givenName }} {{ ::person.familyName }}
+    </td>
+    <td data-title="'Aloittanut'">
+      {{ ::person.enrollmentYear }}
+    </td>
+    <td data-title="'Valmistunut'">
+      {{ ::person.matriculationYear }}
+    </td>
+    <td data-title="'Syntymäpaikka'">
+      {{ ::person.birthPlace }}
+    </td>
+    <td data-title="'Syntymäpäivä'">
+      {{ ::person.birthDate }}
+    </td>
+    <td data-title="'Kuollut'">
+      {{ ::person.deathDate }}
+    </td>
+    <td data-title="'Harrastus'">
+      {{ ::person.hobby | join:', ' }}
+    </td>
+    <td data-title="'Sukulaisnorssi'">
+      {{ ::person.relatedNorssi | join:', ' }}
+    </td>
+    <td data-title="'Matrikkeliteksti'">
+      {{ ::person.entryText }}
+    </td>
+  </tr>
+</table>
+<img class="loading-img" src="images/loading-lg.gif" ng-if="vm.isLoadingResults"></img>
