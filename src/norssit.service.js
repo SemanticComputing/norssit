@@ -76,6 +76,7 @@
         ' PREFIX relatives: <http://ldf.fi/relatives/> ' +
         ' PREFIX schema: <http://schema.org/> ' +
         ' PREFIX schemax: <http://topbraid.org/schemax/> ' +
+        ' PREFIX dct: <http://purl.org/dc/terms/> ' +
         ' PREFIX xml: <http://www.w3.org/XML/1998/namespace> ' +
         ' PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> ';
 
@@ -92,12 +93,21 @@
         '  OPTIONAL { ?id schema:birthDate ?birthDate . }' +
         '  OPTIONAL { ?id schema:deathDate ?deathDate . }' +
         '  OPTIONAL { ?id schema:hobby ?hobby . }' +
+        '  OPTIONAL { ?id schema:image ?image . }' +
+        '  OPTIONAL { ?id dct:description ?description . }' +
         '  OPTIONAL { ?id person_registry:pageNumber ?pageNumber . }' +
         '  OPTIONAL { ?id person_registry:pageImageURL ?pageImageURL . }' +
         '  OPTIONAL { ?id person_registry:relatedNorssi ?relatedNorssi . }' +
         '  OPTIONAL { ?id person_registry:enrollmentYear ?enrollmentYear . }' +
         '  OPTIONAL { ?id person_registry:matriculationYear ?matriculationYear . }' +
         '  OPTIONAL { ?id person_registry:entryText ?entryText . }' +
+        '  OPTIONAL { ?id norssit:wikipedia ?wikipedia . }' +
+        '  OPTIONAL { ?id norssit:viaf ?viaf . }' +
+        '  OPTIONAL { ?id norssit:kansallisbiografia ?kansallisbiografia . }' +
+        '  OPTIONAL { ?id norssit:wikidata ?wikidata . }' +
+        '  OPTIONAL { ?id norssit:ulan ?ulan . }' +
+        '  OPTIONAL { ?id norssit:warsa ?warsa . }' +
+        '  OPTIONAL { ?id norssit:kb ?kb . }' +
         ' }';
 
         // The SPARQL endpoint URL

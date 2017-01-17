@@ -1,5 +1,5 @@
 .facet-name {
-	font-weight: bold;
+  font-weight: bold;
 }
 
 .loading-img {
@@ -8,8 +8,17 @@
 }
 
 table.casualty-table {
-    font-size: 12px;
+  font-size: 12px;
 }
 table.casualty-table tr:nth-child(even) {
-    background-color: #f8f6f4;
+  background-color: #f8f6f4;
+}
+
+.link:after {
+  content:"\A";
+  white-space: pre-wrap;
+}
+
+a.no-style {
+  text-decoration: none;
 }

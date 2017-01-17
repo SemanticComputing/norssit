@@ -5,34 +5,33 @@
 
 <table class="table casualty-table ng-table-responsive" ng-table="vm.tableParams">
   <colgroup>
-    <col width="15%" />
+    <col width="20%" />
+    <col width="10%" />
+    <col width="10%" />
+    <col width="10%" />
+    <col width="10%" />
     <col width="5%" />
-    <col width="5%" />
-    <col width="10%" />
-    <col width="7%" />
-    <col width="7%" />
-    <col width="10%" />
-    <col width="10%" />
     <col width="35%" />
   </colgroup>
-  <tr ng-click="::vm.openPage(person)" ng-show="!vm.isLoadingResults" ng-repeat="person in $data">
-    <td data-title="'Nimi'">
-      {{ ::person.givenName }} {{ ::person.familyName }}
+  <tr ng-show="!vm.isLoadingResults" ng-repeat="person in $data">
+    <td class="person-image-container" data-title="'Nimi'">
+      {{ ::person.givenName }} {{ ::person.familyName }} <br />
+      {{ ::person.birthDate | date:'dd.MM.yyyy' }} - {{ ::person.deathDate | date:'dd.MM.yyyy' }}
+      <img ng-if="::person.image" class="person-image img img-sm img-responsive" ng-src="{{ ::person.image }}" />
     </td>
-    <td data-title="'Aloittanut'">
-      {{ ::person.enrollmentYear }}
-    </td>
-    <td data-title="'Valmistunut'">
+    <td data-title="'Norssi'">
+      {{ ::person.enrollmentYear }} -
       {{ ::person.matriculationYear }}
     </td>
     <td data-title="'Syntymäpaikka'">
       {{ ::person.birthPlace }}
     </td>
-    <td data-title="'Syntymäpäivä'">
-      {{ ::person.birthDate }}
-    </td>
-    <td data-title="'Kuollut'">
-      {{ ::person.deathDate }}
+    <td class="links" data-title="'Linkit'">
+      <a class="link" ng-if="::person.wikipedia" ng-href="{{ ::person.wikipedia }}">Wikipedia</a>
+      <a class="link" ng-if="::person.kansallisbiografia" ng-href="{{ ::person.kansallisbiografia }}">Kansallisbiografia</a>
+      <a class="link" ng-if="::person.warsa" ng-href="http://www.sotasampo.fi/fi/persons/?uri={{ ::person.warsa }}">Sotasampo</a>
+      <a class="link" ng-if="::person.ulan" ng-href="{{ ::person.ulan }}">ULAN</a>
+      <a class="link" ng-if="::person.viaf" ng-href="{{ ::person.viaf }}">VIAF</a>
     </td>
     <td data-title="'Harrastus'">
       {{ ::person.hobby | join:', ' }}
@@ -41,7 +40,7 @@
       {{ ::person.relatedNorssi | join:', ' }}
     </td>
     <td data-title="'Matrikkeliteksti'">
-      {{ ::person.entryText }}
+      <a class="no-style" href="" ng-click="::vm.openPage(person)">{{ ::person.entryText }}</a>
     </td>
   </tr>
 </table>
