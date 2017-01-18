@@ -111,7 +111,7 @@
         ' }';
 
         // The SPARQL endpoint URL
-        var endpointUrl = 'http://localhost:3030/norssit/sparql';
+        var endpointUrl = 'http://ldf.fi/norssit/sparql';
 
         var facetOptions = {
             endpointUrl: endpointUrl,
