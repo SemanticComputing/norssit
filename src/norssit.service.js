@@ -35,6 +35,37 @@
                 name: 'Haku',
                 enabled: true
             },
+            link: {
+                facetId: 'link',
+                predicates: [
+                    {
+                        predicate: '<http://ldf.fi/norssit/wikipedia>',
+                        label: 'Wikipedia'
+                    },
+                    {
+                        predicate: '<http://ldf.fi/norssit/wikidata>',
+                        label: 'Wikidata'
+                    },
+                    {
+                        predicate: '<http://ldf.fi/norssit/kb>',
+                        label: 'Kansallisbiografia'
+                    },
+                    {
+                        predicate: '<http://ldf.fi/norssit/ulan>',
+                        label: 'ULAN'
+                    },
+                    {
+                        predicate: '<http://ldf.fi/norssit/viaf>',
+                        label: 'VIAF'
+                    },
+                    {
+                        predicate: '<http://ldf.fi/norssit/warsa>',
+                        label: 'Sotasampo'
+                    }
+                ],
+                enabled: true,
+                name: 'Linkit'
+            },
             familyName: {
                 facetId: 'familyName',
                 predicate: '<http://schema.org/familyName>',
