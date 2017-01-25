@@ -14,7 +14,7 @@
         };
 
         function link(scope, elem) {
-            return $templateRequest('/page-templates/navbar-fi.html')
+            return $templateRequest('navbar-fi.html')
             .then(function(template) {
                 elem.html(template);
                 return $templateRequest('views/subnavbar.html');

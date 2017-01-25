@@ -1,6 +1,9 @@
 <div>
-    <h1>Norssit</h1>
-    <p>Norssimatrikkelihaku. Voit rajata tulosta tekemällä valintoja suodattimista ja selata henkilöihin liittyvää tietoa linkkien kautta.</p>
+    <h1>Vanhat Norssit</h1>
+    <p>
+      Norssimatrikkelihaku. Voit rajata tulosta tekemällä valintoja suodattimista ja selata henkilöihin liittyvää tietoa linkkien kautta.
+      Lähde: <a href="http://www.norssit.fi/matrikkeli_1867-1992.html">Helsingin Norssin matrikkeli 1867-1992</a>
+    </p>
 </div>
 
 <table class="table casualty-table ng-table-responsive" ng-table="vm.tableParams">
@@ -33,10 +36,10 @@
       <a class="link" ng-if="::person.ulan" ng-href="{{ ::person.ulan }}">ULAN</a>
       <a class="link" ng-if="::person.viaf" ng-href="{{ ::person.viaf }}">VIAF</a>
     </td>
-    <td data-title="'Harrastus'">
+    <td data-title="'Harrastukset'">
       {{ ::person.hobby | join:', ' }}
     </td>
-    <td data-title="'Sukulaisnorssi'">
+    <td data-title="'Sukulaisnorssit'">
       {{ ::person.relatedNorssi | join:', ' }}
     </td>
     <td data-title="'Matrikkeliteksti'">

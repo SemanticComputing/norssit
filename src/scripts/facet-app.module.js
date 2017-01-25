@@ -20,6 +20,10 @@
         $urlMatcherFactoryProvider.strictMode(false);
     })
 
+    .config(function($urlRouterProvider){
+        $urlRouterProvider.otherwise('/');
+    })
+
     .config(function($stateProvider) {
         $stateProvider
         .state('facetApp', {

@@ -89,10 +89,16 @@
         '  } ' +
         '  OPTIONAL { ?id schema:givenName ?givenName . }' +
         '  OPTIONAL { ?id schema:familyName ?familyName . }' +
-        '  OPTIONAL { ?id schema:birthPlace ?birthPlace . }' +
+        '  OPTIONAL { ' +
+        '   ?id schema:birthPlace ?birthPlaceId . ' +
+        '   BIND(REPLACE(STR(?birthPlaceId), "http://ldf.fi/places/", "") AS ?birthPlace) ' +
+        '  }' +
         '  OPTIONAL { ?id schema:birthDate ?birthDate . }' +
         '  OPTIONAL { ?id schema:deathDate ?deathDate . }' +
-        '  OPTIONAL { ?id schema:hobby ?hobby . }' +
+        '  OPTIONAL { ' +
+        '   ?id schema:hobby ?hobby_id . ' +
+        '   BIND(REPLACE(STR(?hobby_id), "http://ldf.fi/hobbies/", "") AS ?hobby) ' +
+        '  }' +
         '  OPTIONAL { ?id schema:image ?image . }' +
         '  OPTIONAL { ?id dct:description ?description . }' +
         '  OPTIONAL { ?id person_registry:pageNumber ?pageNumber . }' +
