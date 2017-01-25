@@ -22,3 +22,9 @@ table.casualty-table tr:nth-child(even) {
 a.no-style {
   text-decoration: none;
 }
+
+.vcenter {
+  display: inline-block;
+  vertical-align: middle;
+  float: none;
+}
