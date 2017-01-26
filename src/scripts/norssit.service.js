@@ -41,14 +41,19 @@
                         label: 'Wikipedia'
                     },
                     {
-                        id: 'wikidata',
-                        predicate: '?id <http://ldf.fi/norssit/wikidata> [] .',
-                        label: 'Wikidata'
+                        id: 'sotasampo',
+                        predicate: '?id <http://ldf.fi/norssit/warsa> [] .',
+                        label: 'Sotasampo'
                     },
                     {
                         id: 'kansallisbiografia',
                         predicate: '?id <http://ldf.fi/norssit/kb> [] .',
                         label: 'Kansallisbiografia'
+                    },
+                    {
+                        id: 'wikidata',
+                        predicate: '?id <http://ldf.fi/norssit/wikidata> [] .',
+                        label: 'Wikidata'
                     },
                     {
                         id: 'ulan',
@@ -59,11 +64,6 @@
                         id: 'viaf',
                         predicate: '?id <http://ldf.fi/norssit/viaf> [] .',
                         label: 'VIAF'
-                    },
-                    {
-                        id: 'sotasampo',
-                        predicate: '?id <http://ldf.fi/norssit/warsa> [] .',
-                        label: 'Sotasampo'
                     }
                 ],
                 enabled: true,
