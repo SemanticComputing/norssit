@@ -151,7 +151,7 @@
         ' }';
 
         // The SPARQL endpoint URL
-        var endpointUrl = 'http://ldf.fi/norssit/sparql';
+        var endpointUrl = 'https://ldf.fi/norssit/sparql';
 
         var facetOptions = {
             endpointUrl: endpointUrl,
