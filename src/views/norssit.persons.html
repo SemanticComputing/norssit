@@ -12,10 +12,9 @@
 </div>
 <div class="row">
   <div class="col-xs-12">
-    <table class="table casualty-table ng-table-responsive" ng-table="vm.tableParams">
+    <table class="table norssi-table ng-table-responsive" ng-table="vm.tableParams">
       <colgroup>
-        <col width="20%" />
-        <col width="10%" />
+        <col width="30%" />
         <col width="10%" />
         <col width="10%" />
         <col width="10%" />
@@ -24,16 +23,23 @@
       </colgroup>
       <tr ng-show="!vm.isLoadingResults" ng-repeat="person in $data">
         <td class="person-image-container" data-title="'Nimi'">
+          <div ng-class="::{ 'name-col col-md-12 col-lg-7': person.image }">
           {{ ::person.givenName }} {{ ::person.familyName }} <br />
-          {{ ::person.birthDate | date:'dd.MM.yyyy' }} - {{ ::person.deathDate | date:'dd.MM.yyyy' }}
-          <img ng-if="::person.image" class="person-image img img-sm img-responsive" ng-src="{{ ::person.image }}" />
+          {{ ::person.birthPlace }} {{ ::person.birthDate | date:'dd.MM.yyyy' }} - {{ ::person.deathDate | date:'dd.MM.yyyy' }}
+          </div>
+          <div ng-if=::"person.image" class="name-col col-md-12 col-lg-5">
+          <img
+            uib-popover-template="'views/profile-image-popover.html'"
+            popover-trigger="'mouseenter'"
+            popover-placement="'auto'"
+            popover-append-to-body="true"
+            class="person-image img img-responsive"
+            ng-src="{{ ::person.image | toArray | first }}" />
+          </div>
         </td>
         <td data-title="'Norssi'">
           {{ ::person.enrollmentYear }} -
           {{ ::person.matriculationYear }}
-        </td>
-        <td data-title="'Syntymäpaikka'">
-          {{ ::person.birthPlace }}
         </td>
         <td class="links" data-title="'Linkit'">
           <a class="link" ng-if="::person.wikipedia" ng-href="{{ ::person.wikipedia }}">Wikipedia</a>
@@ -48,8 +54,11 @@
         <td data-title="'Sukulaisnorssit'">
           {{ ::person.relatedNorssi | join:', ' }}
         </td>
-        <td data-title="'Matrikkeliteksti'">
-          <a class="no-style" href="" ng-click="::vm.openPage(person)">{{ ::person.entryText }}</a>
+        <td data-title="'Matrikkeliteksti'"
+          uib-popover-template="'views/register-text-popover.html'"
+            popover-trigger="'mouseenter'"
+            popover-placement="'auto'">
+          <a class="no-style" href="" ng-click="::vm.openPage(person)">{{ ::person.entryText | truncate: 500 : '...' : true }}</a>
         </td>
       </tr>
     </table>

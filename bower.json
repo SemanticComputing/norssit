@@ -20,9 +20,10 @@
     "angular": "^1.6.1",
     "angular-ui-router": "^1.0.0-rc.1",
     "ng-table-bundle": "^4.0.0",
-    "sparql-faceter": "^1.4.1",
+    "sparql-faceter": "#predicate-facet",
     "bootstrap": "^3.3.7",
     "lodash": "^4.17.4",
-    "angular-filter": "^0.5.14"
+    "angular-filter": "^0.5.14",
+    "angular-bootstrap": "^2.4.0"
   }
 }

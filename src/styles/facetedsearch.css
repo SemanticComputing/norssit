@@ -7,10 +7,11 @@
   margin: auto;
 }
 
-table.casualty-table {
+table.norssi-table {
   font-size: 12px;
 }
-table.casualty-table tr:nth-child(even) {
+
+table.norssi-table tr:nth-child(even) {
   background-color: #f8f6f4;
 }
 
@@ -27,4 +28,16 @@ a.no-style {
   display: inline-block;
   vertical-align: middle;
   float: none;
+}
+
+.person-image-container .name-col {
+  padding: 0px;
+}
+
+.person-image-container img {
+  max-height: 150px;
+}
+
+.popover {
+  max-width: 100%;
 }

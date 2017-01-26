@@ -5,9 +5,6 @@
     /* eslint-disable angular/no-service-method */
     angular.module('facetApp')
 
-    /*
-     * Casualty service
-     */
     .service('norssitService', norssitService);
 
     /* @ngInject */
@@ -39,27 +36,33 @@
                 facetId: 'link',
                 predicates: [
                     {
-                        predicate: '<http://ldf.fi/norssit/wikipedia>',
+                        id: 'wikipedia',
+                        predicate: '?id <http://ldf.fi/norssit/wikipedia> [] .',
                         label: 'Wikipedia'
                     },
                     {
-                        predicate: '<http://ldf.fi/norssit/wikidata>',
+                        id: 'wikidata',
+                        predicate: '?id <http://ldf.fi/norssit/wikidata> [] .',
                         label: 'Wikidata'
                     },
                     {
-                        predicate: '<http://ldf.fi/norssit/kb>',
+                        id: 'kansallisbiografia',
+                        predicate: '?id <http://ldf.fi/norssit/kb> [] .',
                         label: 'Kansallisbiografia'
                     },
                     {
-                        predicate: '<http://ldf.fi/norssit/ulan>',
+                        id: 'ulan',
+                        predicate: '?id <http://ldf.fi/norssit/ulan> [] .',
                         label: 'ULAN'
                     },
                     {
-                        predicate: '<http://ldf.fi/norssit/viaf>',
+                        id: 'viaf',
+                        predicate: '?id <http://ldf.fi/norssit/viaf> [] .',
                         label: 'VIAF'
                     },
                     {
-                        predicate: '<http://ldf.fi/norssit/warsa>',
+                        id: 'sotasampo',
+                        predicate: '?id <http://ldf.fi/norssit/warsa> [] .',
                         label: 'Sotasampo'
                     }
                 ],
@@ -148,7 +151,7 @@
         ' }';
 
         // The SPARQL endpoint URL
-        var endpointUrl = 'https://ldf.fi/norssit/sparql';
+        var endpointUrl = 'http://localhost:3030/norssit/sparql';
 
         var facetOptions = {
             endpointUrl: endpointUrl,
