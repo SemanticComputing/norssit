@@ -34,35 +34,35 @@
             },
             link: {
                 facetId: 'link',
-                predicates: [
+                choices: [
                     {
                         id: 'wikipedia',
-                        predicate: '?id <http://ldf.fi/norssit/wikipedia> [] .',
+                        pattern: '?id <http://ldf.fi/norssit/wikipedia> [] .',
                         label: 'Wikipedia'
                     },
                     {
                         id: 'sotasampo',
-                        predicate: '?id <http://ldf.fi/norssit/warsa> [] .',
+                        pattern: '?id <http://ldf.fi/norssit/warsa> [] .',
                         label: 'Sotasampo'
                     },
                     {
                         id: 'kansallisbiografia',
-                        predicate: '?id <http://ldf.fi/norssit/kb> [] .',
+                        pattern: '?id <http://ldf.fi/norssit/kb> [] .',
                         label: 'Kansallisbiografia'
                     },
                     {
                         id: 'wikidata',
-                        predicate: '?id <http://ldf.fi/norssit/wikidata> [] .',
+                        pattern: '?id <http://ldf.fi/norssit/wikidata> [] .',
                         label: 'Wikidata'
                     },
                     {
                         id: 'ulan',
-                        predicate: '?id <http://ldf.fi/norssit/ulan> [] .',
+                        pattern: '?id <http://ldf.fi/norssit/ulan> [] .',
                         label: 'ULAN'
                     },
                     {
                         id: 'viaf',
-                        predicate: '?id <http://ldf.fi/norssit/viaf> [] .',
+                        pattern: '?id <http://ldf.fi/norssit/viaf> [] .',
                         label: 'VIAF'
                     }
                 ],
