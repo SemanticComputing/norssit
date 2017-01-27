@@ -17,7 +17,7 @@
         <img
         uib-popover-template="'views/profile-image-popover.html'"
         popover-trigger="'mouseenter'"
-        popover-placement="'auto'"
+        popover-placement="auto right"
         popover-append-to-body="true"
         class="person-image img img-responsive"
         ng-src="{{ ::person.image | toArray | first }}" />
@@ -43,7 +43,7 @@
     <td data-title="'Matrikkeliteksti'"
       uib-popover-template="'views/register-text-popover.html'"
       popover-trigger="'mouseenter'"
-      popover-placement="'auto'">
+      popover-placement="auto left">
       <a class="no-style" href="" ng-click="::vm.openPage(person)">{{ ::person.entryText | truncate: 500 : '...' : true }}</a>
     </td>
   </tr>
