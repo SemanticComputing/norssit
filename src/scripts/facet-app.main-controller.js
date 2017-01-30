@@ -13,12 +13,16 @@
     /*
     * Controller for the results view.
     */
-    .controller('MainController', function($scope, $uibModal, _, RESULTS_PER_PAGE,
+    .controller('MainController', MainController);
+
+    /* @ngInject */
+    function MainController($scope, $uibModal, _, RESULTS_PER_PAGE,
                 norssitService, NgTableParams, FacetHandler, facetUrlStateHandlerService) {
 
         var vm = this;
 
         vm.openPage = openPage;
+        vm.toArray = toArray;
 
         var initListener = $scope.$on('sf-initial-constraints', function(event, config) {
             updateResults(event, config);
@@ -32,6 +36,11 @@
             vm.facetOptions.scope = $scope;
             vm.handler = new FacetHandler(vm.facetOptions);
         });
+
+        function toArray(value) {
+            return _.castArray(value);
+        }
+
 
         function initializeTable() {
             vm.tableParams = new NgTableParams(
@@ -90,5 +99,5 @@
                 }
             });
         }
-    });
+    }
 })();

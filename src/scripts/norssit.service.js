@@ -47,7 +47,7 @@
                     },
                     {
                         id: 'kansallisbiografia',
-                        pattern: '?id <http://ldf.fi/norssit/kb> [] .',
+                        pattern: '?id <http://ldf.fi/norssit/kansallisbiografia> [] .',
                         label: 'Kansallisbiografia'
                     },
                     {
@@ -102,6 +102,7 @@
         var prefixes =
         ' PREFIX hobbies: <http://ldf.fi/hobbies/> ' +
         ' PREFIX norssit: <http://ldf.fi/norssit/> ' +
+        ' PREFIX nach: <http://ldf.fi/norssit/achievements/> ' +
         ' PREFIX owl: <http://www.w3.org/2002/07/owl#> ' +
         ' PREFIX person_registry: <http://ldf.fi/schema/person_registry/> ' +
         ' PREFIX places: <http://ldf.fi/places/> ' +
@@ -111,6 +112,7 @@
         ' PREFIX schema: <http://schema.org/> ' +
         ' PREFIX schemax: <http://topbraid.org/schemax/> ' +
         ' PREFIX dct: <http://purl.org/dc/terms/> ' +
+        ' PREFIX skos: <http://www.w3.org/2004/02/skos/core#> ' +
         ' PREFIX xml: <http://www.w3.org/XML/1998/namespace> ' +
         ' PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> ';
 
@@ -148,6 +150,11 @@
         '  OPTIONAL { ?id norssit:ulan ?ulan . }' +
         '  OPTIONAL { ?id norssit:warsa ?warsa . }' +
         '  OPTIONAL { ?id norssit:kb ?kb . }' +
+        '  OPTIONAL { ' +
+        '    ?ach rdfs:subPropertyOf* nach:involved_in .' +
+        '    ?id ?ach ?achievement__id . ' +
+        '    ?achievement__id skos:prefLabel ?achievement__label .' +
+        '  }' +
         ' }';
 
         // The SPARQL endpoint URL

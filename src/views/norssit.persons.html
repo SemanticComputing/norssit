@@ -5,15 +5,15 @@
       <th>Norssi</th>
       <th>Linkit</th>
       <th>Harrastukset</th>
-      <th class="hidden-xs hidden-sm">Sukulaisnorssit</th>
+      <th>Saavutukset</th>
       <th class="hidden-xs hidden-sm">Matrikkeliteksti</th>
     </tr>
     <colgroup>
       <col width="30%" />
       <col width="10%" />
       <col width="10%" />
-      <col width="10%" />
       <col width="5%" />
+      <col width="10%" />
       <col width="35%" />
     </colgroup>
   </thead>
@@ -21,22 +21,25 @@
   <tr ng-show="!vm.isLoadingResults" ng-repeat="person in $data">
     <td class="person-image-container" data-title="'Nimi'">
       <div ng-class="::{ 'name-col col-md-12 col-lg-7': person.image }">
-        {{ ::person.givenName }} {{ ::person.familyName }} <br />
+        <a ng-href="{{ ::person.id }}">{{ ::person.givenName }} {{ ::person.familyName }}</a> <br />
         {{ ::person.birthPlace }} {{ ::person.birthDate | date:'dd.MM.yyyy' }} - {{ ::person.deathDate | date:'dd.MM.yyyy' }}
       </div>
       <div ng-if=::"person.image" class="name-col col-md-12 col-lg-5">
-        <img
-        uib-popover-template="'views/profile-image-popover.html'"
-        popover-trigger="'mouseenter'"
-        popover-placement="auto right"
-        popover-append-to-body="true"
-        class="person-image img img-responsive"
-        ng-src="{{ ::person.image | toArray | first }}" />
+        <div class="vcenter col-md-6" ng-repeat="img in vm.toArray(person.image)">
+          <img
+          uib-popover-template="'views/profile-image-popover.html'"
+          popover-trigger="'mouseenter'"
+          popover-placement="auto right"
+          popover-append-to-body="true"
+          class="person-image img img-responsive"
+          ng-src="{{ img  }}" />
+        </div>
       </div>
     </td>
     <td data-title="'Norssi'">
-      {{ ::person.enrollmentYear }} -
-      {{ ::person.matriculationYear }}
+      <span ng-if="::(person.enrollmentYear || person.matriculationYear)">
+        {{ ::person.enrollmentYear || '?' }} - {{ ::person.matriculationYear || '?' }}
+      </span>
     </td>
     <td class="links" data-title="'Linkit'">
       <a class="link" ng-if="::person.wikipedia" ng-href="{{ ::person.wikipedia }}">Wikipedia</a>
@@ -48,13 +51,14 @@
     <td data-title="'Harrastukset'">
       {{ ::person.hobby | join:', ' }}
     </td>
-    <td class="hidden-xs hidden-sm" data-title="'Sukulaisnorssit'">
-      {{ ::person.relatedNorssi | join:', ' }}
+    <td data-title="'Saavutukset'">
+      {{ ::person.achievement | toArray | map: 'label' | limitTo: 3 | join:', ' }}
     </td>
     <td data-title="'Matrikkeliteksti'"
       class="hidden-xs hidden-sm"
       uib-popover-template="'views/register-text-popover.html'"
       popover-trigger="'mouseenter'"
+      popover-append-to-body="true"
       popover-placement="auto left">
       <a class="no-style" href="" ng-click="::vm.openPage(person)">{{ ::person.entryText | truncate: 500 : '...' : true }}</a>
     </td>

@@ -34,10 +34,6 @@ a.no-style {
   padding: 0px;
 }
 
-.person-image-container img {
-  max-height: 150px;
-}
-
 .popover {
   max-width: 700px;
 }
@@ -55,4 +51,7 @@ a.no-style {
     .navbar-header {
         float:none;
     }
+}
+.profile-img-container {
+  padding: 0px;
 }
