@@ -1,12 +1,23 @@
 <table class="table norssi-table ng-table-responsive" ng-table="vm.tableParams">
-  <colgroup>
-    <col width="30%" />
-    <col width="10%" />
-    <col width="10%" />
-    <col width="10%" />
-    <col width="5%" />
-    <col width="35%" />
-  </colgroup>
+  <thead>
+    <tr>
+      <th>Nimi</th>
+      <th>Norssi</th>
+      <th>Linkit</th>
+      <th>Harrastukset</th>
+      <th class="hidden-xs hidden-sm">Sukulaisnorssit</th>
+      <th class="hidden-xs hidden-sm">Matrikkeliteksti</th>
+    </tr>
+    <colgroup>
+      <col width="30%" />
+      <col width="10%" />
+      <col width="10%" />
+      <col width="10%" />
+      <col width="5%" />
+      <col width="35%" />
+    </colgroup>
+  </thead>
+  <tbody>
   <tr ng-show="!vm.isLoadingResults" ng-repeat="person in $data">
     <td class="person-image-container" data-title="'Nimi'">
       <div ng-class="::{ 'name-col col-md-12 col-lg-7': person.image }">
@@ -37,15 +48,17 @@
     <td data-title="'Harrastukset'">
       {{ ::person.hobby | join:', ' }}
     </td>
-    <td data-title="'Sukulaisnorssit'">
+    <td class="hidden-xs hidden-sm" data-title="'Sukulaisnorssit'">
       {{ ::person.relatedNorssi | join:', ' }}
     </td>
     <td data-title="'Matrikkeliteksti'"
+      class="hidden-xs hidden-sm"
       uib-popover-template="'views/register-text-popover.html'"
       popover-trigger="'mouseenter'"
       popover-placement="auto left">
       <a class="no-style" href="" ng-click="::vm.openPage(person)">{{ ::person.entryText | truncate: 500 : '...' : true }}</a>
     </td>
   </tr>
+  </tbody>
 </table>
 <img class="loading-img" src="images/loading-lg.gif" ng-if="vm.isLoadingResults"></img>
