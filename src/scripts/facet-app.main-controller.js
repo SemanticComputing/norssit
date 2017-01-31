@@ -41,7 +41,6 @@
             return _.castArray(value);
         }
 
-
         function initializeTable() {
             vm.tableParams = new NgTableParams(
                 {

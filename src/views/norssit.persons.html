@@ -1,21 +1,12 @@
-<table class="table norssi-table ng-table-responsive" ng-table="vm.tableParams">
+<table class="table table-striped norssi-table ng-table-responsive" ng-table="vm.tableParams">
   <thead>
     <tr>
-      <th>Nimi</th>
-      <th>Norssi</th>
-      <th>Linkit</th>
-      <th>Harrastukset</th>
-      <th>Saavutukset</th>
-      <th class="hidden-xs hidden-sm">Matrikkeliteksti</th>
+      <th class="col-xs-4">Nimi</th>
+      <th class="col-xs-1">Norssi</th>
+      <th class="col-xs-1">Linkit</th>
+      <th class="col-xs-3 hidden-xs">Harrastukset</th>
+      <th class="col-xs-3 hidden-xs hidden-sm">Matrikkeliteksti</th>
     </tr>
-    <colgroup>
-      <col width="30%" />
-      <col width="10%" />
-      <col width="10%" />
-      <col width="5%" />
-      <col width="10%" />
-      <col width="35%" />
-    </colgroup>
   </thead>
   <tbody>
   <tr ng-show="!vm.isLoadingResults" ng-repeat="person in $data">
@@ -25,14 +16,14 @@
         {{ ::person.birthPlace }} {{ ::person.birthDate | date:'dd.MM.yyyy' }} - {{ ::person.deathDate | date:'dd.MM.yyyy' }}
       </div>
       <div ng-if=::"person.image" class="name-col col-md-12 col-lg-5">
-        <div class="vcenter col-md-6" ng-repeat="img in vm.toArray(person.image)">
-          <img
-          uib-popover-template="'views/profile-image-popover.html'"
-          popover-trigger="'mouseenter'"
-          popover-placement="auto right"
-          popover-append-to-body="true"
-          class="person-image img img-responsive"
-          ng-src="{{ img  }}" />
+        <div ng-repeat="img in ::vm.toArray(person.image)"
+          ng-class="{ 'col-md-12': ($first && $last), 'col-sm-6': !($first && $last) }" class="person-img-col vcenter">
+          <img uib-popover-template="'views/profile-image-popover.html'"
+            popover-trigger="'mouseenter'"
+            popover-placement="auto right"
+            popover-append-to-body="true"
+            class="person-image img img-responsive"
+            ng-src="{{ img  }}" />
         </div>
       </div>
     </td>
@@ -42,6 +33,13 @@
       </span>
     </td>
     <td class="links" data-title="'Linkit'">
+      <div ng-if="::person.achievement">
+        <a href=""
+          uib-popover-template="'views/achievements-popover.html'"
+          popover-trigger="'outsideClick'"
+          popover-append-to-body="true"
+          popover-placement="auto left">Saavutukset</a>
+      </div>
       <a class="link" ng-if="::person.wikipedia" ng-href="{{ ::person.wikipedia }}">Wikipedia</a>
       <a class="link" ng-if="::person.kansallisbiografia" ng-href="{{ ::person.kansallisbiografia }}">Kansallisbiografia</a>
       <a class="link" ng-if="::person.warsa" ng-href="http://www.sotasampo.fi/fi/persons/?uri={{ ::person.warsa }}">Sotasampo</a>
@@ -50,9 +48,6 @@
     </td>
     <td data-title="'Harrastukset'">
       {{ ::person.hobby | join:', ' }}
-    </td>
-    <td data-title="'Saavutukset'">
-      {{ ::person.achievement | toArray | map: 'label' | limitTo: 3 | join:', ' }}
     </td>
     <td data-title="'Matrikkeliteksti'"
       class="hidden-xs hidden-sm"

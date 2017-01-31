@@ -7,14 +7,6 @@
   margin: auto;
 }
 
-table.norssi-table {
-  font-size: 12px;
-}
-
-table.norssi-table tr:nth-child(even) {
-  background-color: #f8f6f4;
-}
-
 .link:after {
   content:"\A";
   white-space: pre-wrap;
@@ -38,8 +30,8 @@ a.no-style {
   max-width: 700px;
 }
 
-.profile-img-container {
-  padding: 0px;
+.person-img-col {
+  padding: 2px;
 }
 
 @media (max-width: 1010px) {
