@@ -4,7 +4,7 @@
       <th class="col-xs-4">Nimi</th>
       <th class="col-xs-1">Norssi</th>
       <th class="col-xs-1">Linkit</th>
-      <th class="col-xs-3 hidden-xs">Harrastukset</th>
+      <th class="col-xs-3"><span class="hidden-xs hidden-sm">Harrastukset</span></th>
       <th class="col-xs-3 hidden-xs hidden-sm">Matrikkeliteksti</th>
     </tr>
   </thead>
@@ -28,9 +28,7 @@
       </div>
     </td>
     <td data-title="'Norssi'">
-      <span ng-if="::(person.enrollmentYear || person.matriculationYear)">
-        {{ ::person.enrollmentYear || '?' }} - {{ ::person.matriculationYear || '?' }}
-      </span>
+      {{ ::person.enrollmentYear || '?' }} - {{ ::person.matriculationYear || '?' }}
     </td>
     <td class="links" data-title="'Linkit'">
       <div ng-if="::person.achievement">
@@ -38,7 +36,7 @@
           uib-popover-template="'views/achievements-popover.html'"
           popover-trigger="'outsideClick'"
           popover-append-to-body="true"
-          popover-placement="auto left">Saavutukset</a>
+          popover-placement="auto top">Saavutukset</a>
       </div>
       <a class="link" ng-if="::person.wikipedia" ng-href="{{ ::person.wikipedia }}">Wikipedia</a>
       <a class="link" ng-if="::person.kansallisbiografia" ng-href="{{ ::person.kansallisbiografia }}">Kansallisbiografia</a>
@@ -47,7 +45,8 @@
       <a class="link" ng-if="::person.viaf" ng-href="{{ ::person.viaf }}">VIAF</a>
     </td>
     <td data-title="'Harrastukset'">
-      {{ ::person.hobby | join:', ' }}
+      <div ng-if="::person.hobby"><span class="visible-xs-block visible-sm-block">Harrastukset: </span>{{ ::person.hobby | join:', ' }}</div>
+      <button class="page-btn visible-xs-block visible-sm-block btn btn-default" ng-click="::vm.openPage(person)">Matrikkelisivu</button>
     </td>
     <td data-title="'Matrikkeliteksti'"
       class="hidden-xs hidden-sm"

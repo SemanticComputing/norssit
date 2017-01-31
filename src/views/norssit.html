@@ -13,7 +13,13 @@
     <div class="col-md-2 pull-md-2">
       <div class="facets">
         <seco-text-facet data-options="vm.facets.entryText"></seco-text-facet>
-        <div class="hidden-sm hidden-xs">
+        <div class="show-facets row">
+          <div class="col-xs-12">
+            <button class="btn btn-default pull-right visible-xs-block visible-sm-block"
+              ng-click="show = !show">{{ show ? 'Piilota fasetit' : 'Näytä fasetit' }}</button>
+          </div>
+        </div>
+        <div class="hideable-facets" ng-class="{ 'hidden-sm hidden-xs': !show }">
           <seco-checkbox-facet data-options="vm.facets.link"></seco-checkbox-facet>
           <seco-basic-facet data-options="vm.facets.familyName"></seco-basic-facet>
           <seco-basic-facet data-options="vm.facets.birthPlace"></seco-basic-facet>

@@ -1,3 +1,15 @@
-<div class="modal-body">
+<div class="modal-header">
+
+  <div class="row">
+    <div class="col-xs-10">
+      <h3 class="modal-title">{{ $ctrl.person.givenName }} {{ $ctrl.person.familyName }}</h3>
+    </div>
+    <div class="col-xs-2 text-right">
+      <button ng-click="$ctrl.close()" class="btn btn-default" aria-label="Sulje">
+        <span aria-hidden="true" class="glyphicon glyphicon-remove"></span>
+      </button>
+    </div>
+  </div>
+</div><div class="modal-body">
   <img class="img img-responsive" ng-src="{{ $ctrl.person.pageImageURL }}" />
 </div>

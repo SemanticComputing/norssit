@@ -78,3 +78,12 @@ a.no-style {
     display:block !important;
   }
 }
+
+.show-facets {
+  margin-top: -10px;
+  padding-bottom: 10px;
+}
+
+.page-btn {
+  margin-top: 10px;
+}
