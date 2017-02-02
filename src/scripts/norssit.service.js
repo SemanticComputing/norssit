@@ -46,9 +46,19 @@
                         label: 'Sotasampo'
                     },
                     {
+                        id: 'kirjasampo',
+                        pattern: '?id <http://ldf.fi/norssit/kirjasampo> [] .',
+                        label: 'Kirjasampo'
+                    },
+                    {
                         id: 'kansallisbiografia',
                         pattern: '?id <http://ldf.fi/norssit/kansallisbiografia> [] .',
                         label: 'Kansallisbiografia'
+                    },
+                    {
+                        id: 'blf',
+                        pattern: '?id <http://ldf.fi/norssit/sls_biografi> [] .',
+                        label: 'BLF'
                     },
                     {
                         id: 'wikidata',
@@ -147,7 +157,9 @@
         '  OPTIONAL { ?id norssit:wikidata ?wikidata . }' +
         '  OPTIONAL { ?id norssit:ulan ?ulan . }' +
         '  OPTIONAL { ?id norssit:warsa ?warsa . }' +
+        '  OPTIONAL { ?id norssit:kirjasampo ?kirjasampo . }' +
         '  OPTIONAL { ?id norssit:kb ?kb . }' +
+        '  OPTIONAL { ?id norssit:sls_biografi ?blf . }' +
         '  OPTIONAL { ' +
         '    ?ach rdfs:subPropertyOf* nach:involved_in .' +
         '    ?id ?ach ?achievement__id . ' +
