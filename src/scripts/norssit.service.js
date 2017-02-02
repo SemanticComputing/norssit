@@ -76,7 +76,7 @@
             },
             birthPlace: {
                 facetId: 'birthPlace',
-                predicate: '<http://schema.org/birthPlace>',
+                predicate: '<http://ldf.fi/schema/person_registry/birthPlace>',
                 name: 'Syntymäpaikka',
                 enabled: true
             },
@@ -125,10 +125,8 @@
         '  } ' +
         '  OPTIONAL { ?id schema:givenName ?givenName . }' +
         '  OPTIONAL { ?id schema:familyName ?familyName . }' +
-        '  OPTIONAL { ' +
-        '   ?id schema:birthPlace ?birthPlaceId . ' +
-        '   BIND(REPLACE(STR(?birthPlaceId), "http://ldf.fi/places/", "") AS ?birthPlace) ' +
-        '  }' +
+        '  OPTIONAL { ?id person_registry:birthPlace ?birthPlace . } ' +
+        '  OPTIONAL { ?id norssit:ordinal ?ordinal . } ' +
         '  OPTIONAL { ?id schema:birthDate ?birthDate . }' +
         '  OPTIONAL { ?id schema:deathDate ?deathDate . }' +
         '  OPTIONAL { ' +
@@ -164,6 +162,7 @@
         var facetOptions = {
             endpointUrl: endpointUrl,
             rdfClass: '<http://xmlns.com/foaf/0.1/Person>',
+            constraint: '?id <http://ldf.fi/norssit/ordinal> ?ordinal .',
             preferredLang : 'fi'
         };
 
@@ -182,7 +181,7 @@
             // Any variable declared in facetOptions.constraint can be used in the sorting,
             // and any valid SPARQL ORDER BY sequence can be given.
             // The results are sorted by URI by default.
-            return resultHandler.getResults(facetSelections, '?familyName ?givenName');
+            return resultHandler.getResults(facetSelections, '?ordinal ?id');
         }
 
         function getFacets() {

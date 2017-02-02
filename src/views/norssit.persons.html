@@ -13,7 +13,11 @@
     <td class="person-image-container" data-title="'Nimi'">
       <div ng-class="::{ 'name-col col-md-12 col-lg-7': person.image }">
         <a ng-href="{{ ::person.id }}">{{ ::person.givenName }} {{ ::person.familyName }}</a> <br />
-        {{ ::person.birthPlace }} {{ ::person.birthDate | date:'dd.MM.yyyy' }} - {{ ::person.deathDate | date:'dd.MM.yyyy' }}
+        {{ ::person.birthPlace }}
+        <span ng-if="::(person.birthDate || person.deathDate)">
+          {{ ::person.birthDate || '?' | date:'dd.MM.yyyy' }}
+          <span ng-if=::person.deathDate>- {{ ::person.deathDate | date:'dd.MM.yyyy' }}</span>
+        </span>
       </div>
       <div ng-if=::"person.image" class="name-col col-md-12 col-lg-5">
         <div ng-repeat="img in ::vm.toArray(person.image)"
