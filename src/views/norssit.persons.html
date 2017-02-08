@@ -1,68 +1,99 @@
-<table class="table table-striped norssi-table ng-table-responsive" ng-table="vm.tableParams">
-  <thead>
-    <tr>
-      <th class="col-xs-4">Nimi</th>
-      <th class="col-xs-1">Norssi</th>
-      <th class="col-xs-1">Linkit</th>
-      <th class="col-xs-3"><span class="hidden-xs hidden-sm">Harrastukset</span></th>
-      <th class="col-xs-3 hidden-xs hidden-sm">Matrikkeliteksti</th>
-    </tr>
-  </thead>
-  <tbody>
-  <tr ng-show="!vm.isLoadingResults" ng-repeat="person in $data">
-    <td class="person-image-container" data-title="'Nimi'">
-      <div ng-class="::{ 'name-col col-md-12 col-lg-7': person.image }">
-        <a ng-href="{{ ::person.id }}">{{ ::person.givenName }} {{ ::person.familyName }}</a> <br />
-        {{ ::person.birthPlace }}
-        <span ng-if="::(person.birthDate || person.deathDate)">
-          {{ ::person.birthDate || '?' | date:'dd.MM.yyyy' }}
-          <span ng-if=::person.deathDate>- {{ ::person.deathDate | date:'dd.MM.yyyy' }}</span>
-        </span>
-      </div>
-      <div ng-if=::"person.image" class="name-col col-md-12 col-lg-5">
-        <div ng-repeat="img in ::vm.toArray(person.image)"
-          ng-class="{ 'col-md-12': ($first && $last), 'col-sm-6': !($first && $last) }" class="person-img-col vcenter">
-          <img uib-popover-template="'views/profile-image-popover.html'"
-            popover-trigger="'mouseenter'"
-            popover-placement="auto right"
-            popover-append-to-body="true"
-            class="person-image img img-responsive"
-            ng-src="{{ img  }}" />
+  <div class="row">
+    <div ng-repeat="person in vm.page" class="person-container">
+      <div class="col-xs-12 col-sm-12 person-panel"ng-class="{ 'col-md-4 col-lg-2': !enlarge, 'col-md-6 col-lg-6 enlarge pull-left': enlarge }" ng-mouseenter="enlarge = true" ng-mouseleave="enlarge = false">
+        <div class="thumbnail">
+          <div class="person-profile-img vertical-center">
+            <img class="img img-responsive center-block media-middle" ng-src="{{ ::(vm.toArray(person.image) | first) || 'http://placehold.it/210x250' }}" />
+            </div>
+            <div class="caption">
+              <a ng-href="{{ ::person.id }}">{{ ::person.givenName }} {{ ::person.familyName }}</a>
+              <p ng-if="::person.birthPlace">{{ ::person.birthPlace }}</p>
+              <p ng-if="::(person.birthDate || person.deathDate)">
+                &#8727;&nbsp;{{ ::person.birthDate || '?' | date:'dd.MM.yyyy' }}
+                <span ng-if=::person.deathDate>&dagger;&nbsp;{{ ::person.deathDate | date:'dd.MM.yyyy' }}</span>
+              </p>
+              <p>Norssi {{ ::person.enrollmentYear || '?' }} - {{ ::person.matriculationYear || '?' }}</p>
+              <div ng-show="enlarge" class="fade person-details">
+              <ul class="list-unstyled">
+                <li ng-if="::person.achievement">
+                  <a href=""
+                    uib-popover-template="'views/achievements-popover.html'"
+                    popover-trigger="'outsideClick'"
+                    popover-append-to-body="true"
+                    popover-placement="auto top">Saavutukset</a>
+                </li>
+                <li ng-if="::person.wikipedia"><a class="link" ng-href="{{ ::person.wikipedia }}">Wikipedia</a></li>
+                <li ng-if="::person.kansallisbiografia"><a class="link" ng-href="{{ ::person.kansallisbiografia }}">Kansallisbiografia</a></li>
+                <li ng-if="::person.warsa"><a class="link" ng-href="http://www.sotasampo.fi/fi/persons/?uri={{ ::person.warsa }}">Sotasampo</a></li>
+                <li ng-if="::person.kirjasampo"><a class="link" ng-href="{{ ::person.kirjasampo }}">Kirjasampo</a></li>
+                <li ng-if="::person.blf"><a class="link" ng-href="{{ ::person.blf }}">BLF</a></li>
+                <li ng-if="::person.ulan"><a class="link" ng-href="{{ ::person.ulan }}">ULAN</a></li>
+                <li ng-if="::person.viaf"><a class="link" ng-href="{{ ::person.viaf }}">VIAF</a></li>
+              </ul>
+              </div>
+          </div>
         </div>
       </div>
-    </td>
-    <td data-title="'Norssi'">
-      {{ ::person.enrollmentYear || '?' }} - {{ ::person.matriculationYear || '?' }}
-    </td>
-    <td class="links" data-title="'Linkit'">
-      <div ng-if="::person.achievement">
-        <a href=""
-          uib-popover-template="'views/achievements-popover.html'"
-          popover-trigger="'outsideClick'"
-          popover-append-to-body="true"
-          popover-placement="auto top">Saavutukset</a>
-      </div>
-      <a class="link" ng-if="::person.wikipedia" ng-href="{{ ::person.wikipedia }}">Wikipedia</a>
-      <a class="link" ng-if="::person.kansallisbiografia" ng-href="{{ ::person.kansallisbiografia }}">Kansallisbiografia</a>
-      <a class="link" ng-if="::person.warsa" ng-href="http://www.sotasampo.fi/fi/persons/?uri={{ ::person.warsa }}">Sotasampo</a>
-      <a class="link" ng-if="::person.kirjasampo" ng-href="{{ ::person.kirjasampo }}">Kirjasampo</a>
-      <a class="link" ng-if="::person.blf" ng-href="{{ ::person.blf }}">BLF</a>
-      <a class="link" ng-if="::person.ulan" ng-href="{{ ::person.ulan }}">ULAN</a>
-      <a class="link" ng-if="::person.viaf" ng-href="{{ ::person.viaf }}">VIAF</a>
-    </td>
-    <td data-title="'Harrastukset'">
-      <div ng-if="::person.hobby"><span class="visible-xs-block visible-sm-block">Harrastukset: </span>{{ ::person.hobby | join:', ' }}</div>
-      <button class="page-btn visible-xs-block visible-sm-block btn btn-default" ng-click="::vm.openPage(person)">Matrikkelisivu</button>
-    </td>
-    <td data-title="'Matrikkeliteksti'"
-      class="hidden-xs hidden-sm"
-      uib-popover-template="'views/register-text-popover.html'"
-      popover-trigger="'mouseenter'"
-      popover-append-to-body="true"
-      popover-placement="auto left">
-      <a class="no-style" href="" ng-click="::vm.openPage(person)">{{ ::person.entryText | truncate: 500 : '...' : true }}</a>
-    </td>
-  </tr>
-  </tbody>
-</table>
-<img class="loading-img" src="images/loading-lg.gif" ng-if="vm.isLoadingResults"></img>
+      <div class="clearfix visible-lg-block" ng-if="!enlarge && ($index + 1) % 6 == 0"></div>
+      <div class="clearfix visible-md-block" ng-if="!enlarge && ($index + 1) % 3 == 0"></div>
+      <div class="clearfix visible-sm-block" ng-if="!enlarge && ($index + 1) % 1 == 0"></div>
+      <div class="clearfix visible-xs-block" ng-if="!enlarge && ($index + 1) % 1 == 0"></div>
+    </div>
+  </div>
+  <!--<tr ng-show="!vm.isLoadingResults" ng-repeat="person in $data">-->
+    <!--<td class="person-image-container" data-title="'Nimi'">-->
+      <!--<div ng-class="::{ 'name-col col-md-12 col-lg-7': person.image }">-->
+        <!--<a ng-href="{{ ::person.id }}">{{ ::person.givenName }} {{ ::person.familyName }}</a> <br />-->
+        <!--{{ ::person.birthPlace }}-->
+        <!--<span ng-if="::(person.birthDate || person.deathDate)">-->
+          <!--{{ ::person.birthDate || '?' | date:'dd.MM.yyyy' }}-->
+          <!--<span ng-if=::person.deathDate>- {{ ::person.deathDate | date:'dd.MM.yyyy' }}</span>-->
+        <!--</span>-->
+      <!--</div>-->
+      <!--<div ng-if=::"person.image" class="name-col col-md-12 col-lg-5">-->
+        <!--<div ng-repeat="img in ::vm.toArray(person.image)"-->
+          <!--ng-class="{ 'col-md-12': ($first && $last), 'col-sm-6': !($first && $last) }" class="person-img-col vcenter">-->
+          <!--<img uib-popover-template="'views/profile-image-popover.html'"-->
+            <!--popover-trigger="'mouseenter'"-->
+            <!--popover-placement="auto right"-->
+            <!--popover-append-to-body="true"-->
+            <!--class="person-image img img-responsive"-->
+            <!--ng-src="{{ img  }}" />-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</td>-->
+    <!--<td data-title="'Norssi'">-->
+      <!--{{ ::person.enrollmentYear || '?' }} - {{ ::person.matriculationYear || '?' }}-->
+    <!--</td>-->
+    <!--<td class="links" data-title="'Linkit'">-->
+      <!--<div ng-if="::person.achievement">-->
+        <!--<a href=""-->
+          <!--uib-popover-template="'views/achievements-popover.html'"-->
+          <!--popover-trigger="'outsideClick'"-->
+          <!--popover-append-to-body="true"-->
+          <!--popover-placement="auto top">Saavutukset</a>-->
+      <!--</div>-->
+      <!--<a class="link" ng-if="::person.wikipedia" ng-href="{{ ::person.wikipedia }}">Wikipedia</a>-->
+      <!--<a class="link" ng-if="::person.kansallisbiografia" ng-href="{{ ::person.kansallisbiografia }}">Kansallisbiografia</a>-->
+      <!--<a class="link" ng-if="::person.warsa" ng-href="http://www.sotasampo.fi/fi/persons/?uri={{ ::person.warsa }}">Sotasampo</a>-->
+      <!--<a class="link" ng-if="::person.kirjasampo" ng-href="{{ ::person.kirjasampo }}">Kirjasampo</a>-->
+      <!--<a class="link" ng-if="::person.blf" ng-href="{{ ::person.blf }}">BLF</a>-->
+      <!--<a class="link" ng-if="::person.ulan" ng-href="{{ ::person.ulan }}">ULAN</a>-->
+      <!--<a class="link" ng-if="::person.viaf" ng-href="{{ ::person.viaf }}">VIAF</a>-->
+    <!--</td>-->
+    <!--<td data-title="'Harrastukset'">-->
+      <!--<div ng-if="::person.hobby"><span class="visible-xs-block visible-sm-block">Harrastukset: </span>{{ ::person.hobby | join:', ' }}</div>-->
+      <!--<button class="page-btn visible-xs-block visible-sm-block btn btn-default" ng-click="::vm.openPage(person)">Matrikkelisivu</button>-->
+    <!--</td>-->
+    <!--<td data-title="'Matrikkeliteksti'"-->
+      <!--class="hidden-xs hidden-sm"-->
+      <!--uib-popover-template="'views/register-text-popover.html'"-->
+      <!--popover-trigger="'mouseenter'"-->
+      <!--popover-append-to-body="true"-->
+      <!--popover-placement="auto left">-->
+      <!--<a class="no-style" href="" ng-click="::vm.openPage(person)">{{ ::person.entryText | truncate: 500 : '...' : true }}</a>-->
+    <!--</td>-->
+  <!--</tr>-->
+  <!--</tbody>-->
+<!--</table>-->
+<!--<img class="loading-img" src="images/loading-lg.gif" ng-if="vm.isLoadingResults"></img>-->

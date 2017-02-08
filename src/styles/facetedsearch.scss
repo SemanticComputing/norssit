@@ -87,3 +87,40 @@ a.no-style {
 .page-btn {
   margin-top: 10px;
 }
+
+.person-panel {
+  overflow: hidden;
+
+  p {
+    margin-bottom: 2px;
+  }
+  .caption {
+    overflow: hidden;
+  }
+}
+
+.fade.ng-hide {
+  opacity: 0;
+}
+
+.fade.ng-hide-add,
+.fade.ng-hide-remove {
+  transition: all linear 0.5s;
+}
+
+.person-details {
+  opacity: 1;
+}
+
+.person-profile-img {
+    min-height: 250px;
+}
+
+.vertical-center {
+  display: flex;
+  align-items: center;
+}
+
+.enlarge-add, .enlarge-remove {
+  transition:0.3s linear all;
+}

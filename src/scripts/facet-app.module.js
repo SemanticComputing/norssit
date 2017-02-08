@@ -9,7 +9,8 @@
         'ui.router',
         'seco.facetedSearch',
         'ngTable',
-        'angular.filter'
+        'angular.filter',
+        'ngAnimate'
     ])
 
     .constant('_', _) // eslint-disable-line no-undef

@@ -41,17 +41,6 @@
             return _.castArray(value);
         }
 
-        function initializeTable() {
-            vm.tableParams = new NgTableParams(
-                {
-                    count: RESULTS_PER_PAGE
-                },
-                {
-                    getData: getData
-                }
-            );
-        }
-
         function openPage(person) {
             $uibModal.open({
                 component: 'registerPageModal',
@@ -68,21 +57,6 @@
             return options;
         }
 
-        function getData(params) {
-            vm.isLoadingResults = true;
-
-            return vm.pager.getPage(params.page() - 1, params.count())
-            .then(function(page) {
-                return vm.pager.getTotalCount().then(function(count) {
-                    vm.tableParams.total(count);
-                    return page;
-                }).then(function(page) {
-                    vm.isLoadingResults = false;
-                    return page;
-                });
-            });
-        }
-
         function updateResults(event, facetSelections) {
             facetUrlStateHandlerService.updateUrlParams(facetSelections);
             vm.isLoadingResults = true;
@@ -90,12 +64,12 @@
             norssitService.getResults(facetSelections)
             .then(function(pager) {
                 vm.pager = pager;
-                if (vm.tableParams) {
-                    vm.tableParams.page(1);
-                    vm.tableParams.reload();
-                } else {
-                    initializeTable();
-                }
+                return vm.pager.getPage(0);
+            })
+            .then(function(page) {
+                vm.page = page;
+                vm.isLoadingResults = false;
+                return page;
             });
         }
     }

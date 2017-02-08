@@ -181,6 +181,7 @@
         var resultOptions = {
             queryTemplate: query,
             prefixes: prefixes,
+            resultsPerPage: 50,
             pagesPerQuery: 2 // get two pages of results per query
         };
 
