@@ -41,9 +41,9 @@
                         label: 'Wikipedia'
                     },
                     {
-                        id: 'sotasampo',
-                        pattern: '?id <http://ldf.fi/norssit/warsa> [] .',
-                        label: 'Sotasampo'
+                        id: 'kansallisbiografia',
+                        pattern: '?id <http://ldf.fi/norssit/kansallisbiografia> [] .',
+                        label: 'Kansallisbiografia'
                     },
                     {
                         id: 'kirjasampo',
@@ -51,9 +51,14 @@
                         label: 'Kirjasampo'
                     },
                     {
-                        id: 'kansallisbiografia',
-                        pattern: '?id <http://ldf.fi/norssit/kansallisbiografia> [] .',
-                        label: 'Kansallisbiografia'
+                        id: 'kulttuurisampo',
+                        pattern: '?id <http://ldf.fi/norssit/kulttuurisampo> [] .',
+                        label: 'Kulttuurisampo'
+                    },
+                    {
+                        id: 'sotasampo',
+                        pattern: '?id <http://ldf.fi/norssit/warsa> [] .',
+                        label: 'Sotasampo'
                     },
                     {
                         id: 'blf',
@@ -74,10 +79,15 @@
                         id: 'viaf',
                         pattern: '?id <http://ldf.fi/norssit/viaf> [] .',
                         label: 'VIAF'
+                    },
+                    {
+                        id: 'genicom',
+                        pattern: '?id <http://ldf.fi/norssit/genicom> [] .',
+                        label: 'www.geni.com'
                     }
                 ],
                 enabled: true,
-                name: 'Linkit'
+                name: 'Linkit' 
             },
             familyName: {
                 facetId: 'familyName',
@@ -158,7 +168,9 @@
         '  OPTIONAL { ?id norssit:ulan ?ulan . }' +
         '  OPTIONAL { ?id norssit:warsa ?warsa . }' +
         '  OPTIONAL { ?id norssit:kirjasampo ?kirjasampo . }' +
+        '  OPTIONAL { ?id norssit:kulttuurisampo ?kulttuurisampo . }' +
         '  OPTIONAL { ?id norssit:kb ?kb . }' +
+        '  OPTIONAL { ?id norssit:genicom ?genicom . }' +
         '  OPTIONAL { ?id norssit:sls_biografi ?blf . }' +
         '  OPTIONAL { ' +
         '    ?ach rdfs:subPropertyOf* nach:involved_in .' +

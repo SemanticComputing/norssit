@@ -46,9 +46,11 @@
       <a class="link" ng-if="::person.kansallisbiografia" ng-href="{{ ::person.kansallisbiografia }}">Kansallisbiografia</a>
       <a class="link" ng-if="::person.warsa" ng-href="http://www.sotasampo.fi/fi/persons/?uri={{ ::person.warsa }}">Sotasampo</a>
       <a class="link" ng-if="::person.kirjasampo" ng-href="{{ ::person.kirjasampo }}">Kirjasampo</a>
-      <a class="link" ng-if="::person.blf" ng-href="{{ ::person.blf }}">BLF</a>
+      <a class="link" ng-if="::person.kulttuurisampo" ng-href="{{ ::person.kulttuurisampo }}">Kulttuurisampo</a>
+     <a class="link" ng-if="::person.blf" ng-href="{{ ::person.blf }}">BLF</a>
       <a class="link" ng-if="::person.ulan" ng-href="{{ ::person.ulan }}">ULAN</a>
       <a class="link" ng-if="::person.viaf" ng-href="{{ ::person.viaf }}">VIAF</a>
+      <a class="link" ng-if="::person.genicom" ng-href="{{ ::person.genicom }}">www.geni.com</a>
     </td>
     <td data-title="'Harrastukset'">
       <div ng-if="::person.hobby"><span class="visible-xs-block visible-sm-block">Harrastukset: </span>{{ ::person.hobby | join:', ' }}</div>
