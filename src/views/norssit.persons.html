@@ -4,7 +4,7 @@
       <th class="col-xs-4">Nimi</th>
       <th class="col-xs-1">Norssi</th>
       <th class="col-xs-1">Linkit</th>
-      <th class="col-xs-3"><span class="hidden-xs hidden-sm">Harrastukset</span></th>
+      <th class="col-xs-3"><span class="hidden-xs hidden-sm">Muuta</span></th>
       <th class="col-xs-3 hidden-xs hidden-sm">Matrikkeliteksti</th>
     </tr>
   </thead>
@@ -52,8 +52,15 @@
       <a class="link" ng-if="::person.viaf" ng-href="{{ ::person.viaf }}">VIAF</a>
       <a class="link" ng-if="::person.genicom" ng-href="{{ ::person.genicom }}">www.geni.com</a>
     </td>
-    <td data-title="'Harrastukset'">
-      <div ng-if="::person.hobby"><span class="visible-xs-block visible-sm-block">Harrastukset: </span>{{ ::person.hobby | join:', ' }}</div>
+    <td data-title="'Muuta'">
+      <div ng-if="::person.relative">
+      	<span>Sukulaiset: </span><br>
+      	<span ng-repeat="relative in (person.relative | toArray)">
+      		{{ ::relative.type }}<a ng-href="{{ ::relative.id }}"> {{ ::relative.name }}</a><br>
+      	</span>
+      </div>
+      <button class="page-btn visible-xs-block visible-sm-block btn btn-default" ng-click="::vm.openPage(person)">Matrikkelisivu</button>
+      <div ng-if="::person.hobby"><span>Harrastukset: </span><br>{{ ::person.hobby | join:', ' }}</div>
       <button class="page-btn visible-xs-block visible-sm-block btn btn-default" ng-click="::vm.openPage(person)">Matrikkelisivu</button>
     </td>
     <td data-title="'Matrikkeliteksti'"

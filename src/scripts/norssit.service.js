@@ -134,12 +134,13 @@
         ' PREFIX dct: <http://purl.org/dc/terms/> ' +
         ' PREFIX skos: <http://www.w3.org/2004/02/skos/core#> ' +
         ' PREFIX xml: <http://www.w3.org/XML/1998/namespace> ' +
+        ' PREFIX bioc: <http://ldf.fi/norssit/bioc/> ' +
         ' PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> ';
 
         // The query for the results.
         // ?id is bound to the norssit URI.
         var query =
-        ' SELECT * WHERE {' +
+        ' SELECT DISTINCT * WHERE {' +
         '  { ' +
         '    <RESULT_SET> ' +
         '  } ' +
@@ -172,6 +173,14 @@
         '  OPTIONAL { ?id norssit:kb ?kb . }' +
         '  OPTIONAL { ?id norssit:genicom ?genicom . }' +
         '  OPTIONAL { ?id norssit:sls_biografi ?blf . }' +
+        '  OPTIONAL { ' +
+        '  	?id bioc:has_family_relation [' +
+        '    	bioc:inheres_in ?relative__id ;' +
+        '      	a/skos:prefLabel ?relative__type ] .' +
+        '    	FILTER (LANG(?relative__type)="fi")' +
+        '    	?relative__id schema:familyName ?relative__familyName ; schema:givenName ?relative__givenName .' +
+        '		BIND (replace(concat(?relative__givenName," ",?relative__familyName),"[(][^)]+[)]\s*","") AS ?relative__name) ' +
+        '  }' +
         '  OPTIONAL { ' +
         '    ?ach rdfs:subPropertyOf* nach:involved_in .' +
         '    ?id ?ach ?achievement__id . ' +
