@@ -185,7 +185,7 @@
         '    ?ach rdfs:subPropertyOf* nach:involved_in .' +
         '    ?id ?ach ?achievement__id . ' +
         '    ?achievement__id skos:prefLabel ?achievement__label .' +
-        '    ?achievement__id norssit:wikipedia ?achievement__wikipedia .' +
+        '    ?achievement__id norssit:wikipedia|norssit:www ?achievement__wikipedia .' +
         '  }' +
         ' }';
 

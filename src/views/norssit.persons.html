@@ -55,7 +55,7 @@
     <td data-title="'Muuta'">
       <div ng-if="::person.relative">
       	<span>Sukulaiset: </span><br>
-      	<span ng-repeat="relative in (person.relative | toArray)">
+      	<span ng-repeat="relative in vm.toArray(person.relative)">
       		{{ ::relative.type }}<a ng-href="{{ ::relative.id }}"> {{ ::relative.name }}</a><br>
       	</span>
       </div>
