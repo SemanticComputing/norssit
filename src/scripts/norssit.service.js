@@ -134,7 +134,7 @@
         ' PREFIX dct: <http://purl.org/dc/terms/> ' +
         ' PREFIX skos: <http://www.w3.org/2004/02/skos/core#> ' +
         ' PREFIX xml: <http://www.w3.org/XML/1998/namespace> ' +
-        ' PREFIX bioc: <http://ldf.fi/norssit/bioc/> ' +
+        ' PREFIX bioc: <http://ldf.fi/schema/bioc/> ' +
         ' PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> ';
 
         // The query for the results.
