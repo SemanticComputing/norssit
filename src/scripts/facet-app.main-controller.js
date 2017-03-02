@@ -16,13 +16,14 @@
     .controller('MainController', MainController);
 
     /* @ngInject */
-    function MainController($scope, $uibModal, _, RESULTS_PER_PAGE,
+    function MainController($scope, $state, $uibModal, _, RESULTS_PER_PAGE,
                 norssitService, NgTableParams, FacetHandler, facetUrlStateHandlerService) {
 
         var vm = this;
 
         vm.openPage = openPage;
         vm.toArray = toArray;
+        vm.removeFacetSelections = removeFacetSelections;
 
         var initListener = $scope.$on('sf-initial-constraints', function(event, config) {
             updateResults(event, config);
@@ -39,6 +40,10 @@
 
         function toArray(value) {
             return _.castArray(value);
+        }
+
+        function removeFacetSelections() {
+            $state.reload();
         }
 
         function initializeTable() {
