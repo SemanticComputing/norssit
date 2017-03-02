@@ -112,7 +112,18 @@
                 name: 'Valmistumisvuosi',
                 enabled: true
             },
-            hobby: {
+            occupation: {
+                facetId: 'occupation',
+                predicate: '^<http://ldf.fi/schema/bioc/title_inheres_in>/a',
+                name: 'Arvo tai ammatti',
+                enabled: true
+            },
+            organization: {
+                facetId: 'organization',
+                predicate: '^<http://ldf.fi/schema/bioc/title_inheres_in>/<http://ldf.fi/schema/bioc/relates_to>',
+                name: 'Työpaikka tai oppilaitos',
+                enabled: true
+            },hobby: {
                 facetId: 'hobby',
                 predicate: '<http://schema.org/hobby>',
                 name: 'Harrastus'
