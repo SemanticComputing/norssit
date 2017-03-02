@@ -83,11 +83,11 @@
                     {
                         id: 'genicom',
                         pattern: '?id <http://ldf.fi/norssit/genicom> [] .',
-                        label: 'www.geni.com'
+                        label: 'Geni.com'
                     }
                 ],
                 enabled: true,
-                name: 'Linkit' 
+                name: 'Linkit'
             },
             familyName: {
                 facetId: 'familyName',
@@ -106,13 +106,6 @@
                 name: 'Aloittamisvuosi',
                 enabled: true
             },
-            /*
-            occupation: {
-                facetId: 'occupation',
-                predicate: '<http://ldf.fi/schema/bioc/bearer_of_title>',
-                name: 'Ammatti tai arvo',
-                enabled: true
-            }, */
             matriculationYear: {
                 facetId: 'matriculationYear',
                 predicate: '<http://ldf.fi/schema/person_registry/matriculationYear>',
@@ -181,7 +174,6 @@
         '  OPTIONAL { ?id norssit:genitree ?genitree . }' +
         '  OPTIONAL { ?id norssit:genicom ?genicom . }' +
         '  OPTIONAL { ?id norssit:sls_biografi ?blf . }' +
-      // '  OPTIONAL { ?id bioc: bearer_of_title ?occupation . }' +
         '  OPTIONAL { ' +
         '  	?id bioc:has_family_relation [' +
         '    	bioc:inheres_in ?relative__id ;' +
