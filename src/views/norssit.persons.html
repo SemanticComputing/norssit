@@ -12,12 +12,14 @@
   <tr ng-show="!vm.isLoadingResults" ng-repeat="person in $data">
     <td class="person-image-container" data-title="'Nimi'">
       <div ng-class="::{ 'name-col col-md-12 col-lg-7': person.image }">
-        <a ng-href="{{ ::person.id }}">{{ ::person.givenName }} {{ ::person.familyName }}</a> <br />
+        {{ ::person.givenName }} {{ ::person.familyName }} <br />
         {{ ::person.birthPlace }}
         <span ng-if="::(person.birthDate || person.deathDate)">
           {{ ::person.birthDate || '?' | date:'dd.MM.yyyy' }}
           <span ng-if=::person.deathDate>- {{ ::person.deathDate | date:'dd.MM.yyyy' }}</span>
+          <br />
         </span>
+        <a ng-href="{{ ::person.id }}">Data</a>
       </div>
       <div ng-if=::"person.image" class="name-col col-md-12 col-lg-5">
         <div ng-repeat="img in ::vm.toArray(person.image)"
