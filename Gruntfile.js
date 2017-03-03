@@ -89,8 +89,8 @@ module.exports = function (grunt) {
                                 connect.static('./page-templates')
                             ),
                             connect().use(
-                                '/css',
-                                connect.static('./src/css')
+                                '/styles',
+                                connect.static('./src/styles')
                             ),
                             connect().use(
                                 '/pageimages',
