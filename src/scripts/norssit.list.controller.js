@@ -16,8 +16,8 @@
     .controller('CardsController', CardsController);
 
     /* @ngInject */
-    function CardsController($scope, $state, $uibModal, _, norssitService, FacetHandler,
-            facetUrlStateHandlerService) {
+    function CardsController($scope, $location, $state, $uibModal, _, norssitService,
+            FacetHandler, facetUrlStateHandlerService) {
 
         var vm = this;
 
@@ -29,6 +29,8 @@
         vm.nextPage = nextPage;
         vm.isScrollDisabled = isScrollDisabled;
         vm.removeFacetSelections = removeFacetSelections;
+        vm.sortBy = sortBy;
+        vm.getSortClass = getSortClass;
 
         vm.people = [];
 
@@ -93,24 +95,62 @@
             return vm.isLoadingResults || nextPageNo > maxPage;
         }
 
-        var latestUpdate;
+        function sortBy(sortBy) {
+            var sort = $location.search().sortBy;
+            if (sort === sortBy) {
+                $location.search('desc', $location.search().desc ? null : true);
+            }
+            $location.search('sortBy', sortBy);
+            return fetchResults({ constraint: vm.previousSelections });
+        }
+
+        function getSortBy() {
+            var sortBy = $location.search().sortBy;
+            if (!_.isString(sortBy)) {
+                sortBy = '?ordinal';
+            }
+            var sort;
+            if ($location.search().desc) {
+                sort = 'DESC(' + sortBy + ')';
+            } else {
+                sort = sortBy;
+            }
+            return sortBy === '?ordinal' ? sort : sort + ' ?ordinal';
+        }
+
+        function getSortClass(sortBy, numeric) {
+            var sort = $location.search().sortBy;
+            var cls = numeric ? 'glyphicon-sort-by-order' : 'glyphicon-sort-by-alphabet';
+
+            if (sort === sortBy) {
+                if ($location.search().desc) {
+                    return cls + '-alt';
+                }
+                return cls;
+            }
+        }
+
         function updateResults(event, facetSelections) {
             if (vm.previousSelections && _.isEqual(facetSelections.constraint,
                     vm.previousSelections)) {
                 return;
             }
             vm.previousSelections = _.clone(facetSelections.constraint);
+            facetUrlStateHandlerService.updateUrlParams(facetSelections);
+            return fetchResults(facetSelections);
+        }
+
+        var latestUpdate;
+        function fetchResults(facetSelections) {
+            vm.isLoadingResults = true;
+            vm.people = [];
+            vm.error = undefined;
 
             var updateId = _.uniqueId();
             latestUpdate = updateId;
 
-            vm.error = undefined;
-            facetUrlStateHandlerService.updateUrlParams(facetSelections);
-            vm.isLoadingResults = true;
-            vm.people = [];
             nextPageNo = 0;
-
-            norssitService.getResults(facetSelections)
+            norssitService.getResults(facetSelections, getSortBy())
             .then(function(pager) {
                 return pager.getMaxPageNo().then(function(no) {
                     return [pager, no];

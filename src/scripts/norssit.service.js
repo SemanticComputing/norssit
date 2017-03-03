@@ -207,7 +207,8 @@
         var facetOptions = {
             endpointUrl: endpointUrl,
             rdfClass: '<http://xmlns.com/foaf/0.1/Person>',
-            constraint: '?id <http://ldf.fi/norssit/ordinal> ?ordinal .',
+            constraint: '?id <http://ldf.fi/norssit/ordinal> ?ordinal . ' +
+                'OPTIONAL { ?id <http://schema.org/familyName> ?familyName . }',
             preferredLang : 'fi'
         };
 
