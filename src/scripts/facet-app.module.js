@@ -9,7 +9,8 @@
         'ui.router',
         'seco.facetedSearch',
         'ngTable',
-        'angular.filter'
+        'angular.filter',
+        'infinite-scroll'
     ])
 
     .constant('_', _) // eslint-disable-line no-undef
@@ -21,15 +22,21 @@
     })
 
     .config(function($urlRouterProvider){
-        $urlRouterProvider.otherwise('/');
+        $urlRouterProvider.otherwise('/lista');
     })
 
     .config(function($stateProvider) {
         $stateProvider
-        .state('facetApp', {
-            url: '/',
-            templateUrl: 'views/norssit.html',
-            controller: 'MainController',
+        .state('table', {
+            url: '/taulukko',
+            templateUrl: 'views/norssit.table.html',
+            controller: 'TableController',
+            controllerAs: 'vm'
+        })
+        .state('list', {
+            url: '/lista',
+            templateUrl: 'views/norssit.list.html',
+            controller: 'CardsController',
             controllerAs: 'vm'
         });
     });

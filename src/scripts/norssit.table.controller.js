@@ -13,10 +13,10 @@
     /*
     * Controller for the results view.
     */
-    .controller('MainController', MainController);
+    .controller('TableController', TableController);
 
     /* @ngInject */
-    function MainController($scope, $state, $uibModal, _, RESULTS_PER_PAGE,
+    function TableController($scope, $state, $uibModal, _, RESULTS_PER_PAGE,
                 norssitService, NgTableParams, FacetHandler, facetUrlStateHandlerService) {
 
         var vm = this;
