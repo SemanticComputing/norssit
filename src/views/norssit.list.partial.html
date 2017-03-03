@@ -10,7 +10,7 @@
           </div>
           <div class="caption">
             <div class="visible-caption">
-              <a ng-href="{{ ::person.id }}">{{ ::person.ordinal }}. {{ ::person.givenName }} {{ ::person.familyName }}</a>
+              <b>{{ ::person.ordinal }}. {{ ::person.givenName }} {{ ::person.familyName }}</b>
               <p ng-if="::person.birthPlace">{{ ::person.birthPlace }}</p>
               <p ng-if="::(person.birthDate || person.deathDate)">
               &#8727;&nbsp;{{ ::person.birthDate || '?' | date:'dd.MM.yyyy' }}
