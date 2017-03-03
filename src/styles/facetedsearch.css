@@ -91,10 +91,10 @@ a.no-style {
 .person-panel {
   overflow: hidden;
 
-  p {
+}
+.person-panel p {
     margin-bottom: 2px;
   }
-}
 
 .person-profile-img {
     min-height: 250px;
