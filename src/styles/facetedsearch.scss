@@ -87,3 +87,20 @@ a.no-style {
 .page-btn {
   margin-top: 10px;
 }
+
+.person-panel {
+  overflow: hidden;
+
+  p {
+    margin-bottom: 2px;
+  }
+}
+
+.person-profile-img {
+    min-height: 250px;
+}
+
+.vertical-center {
+  display: flex;
+  align-items: center;
+}

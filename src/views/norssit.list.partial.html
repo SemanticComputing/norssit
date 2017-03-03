@@ -18,20 +18,24 @@
               </p>
               <p>Norssi {{ ::person.enrollmentYear || '?' }} - {{ ::person.matriculationYear || '?' }}</p>
             </div>
-            <div uib-collapse="!enlarge" class="enlarge person-details">
-              <p ng-if="::person.hobby">Harrastukset: {{ ::person.hobby | join: ', ' }}</p>
+            <div uib-collapse="!enlarge" class="person-details">
+              <p ng-if="::person.hobby">Harrastukset: {{ ::vm.toArray(person.hobby) | join: ', ' }}</p>
+              <a class="link" ng-href="{{ ::person.id }}">Data</a>
               <a href="" class="link" ng-if="::person.achievement"
                 uib-popover-template="'views/achievements-popover.html'"
                 popover-trigger="'outsideClick'"
                 popover-append-to-body="false"
                 popover-placement="auto top">Saavutukset</a>
-              <a ng-if="::person.wikipedia" class="link" ng-href="{{ ::person.wikipedia }}">Wikipedia</a>
-              <a ng-if="::person.kansallisbiografia" class="link" ng-href="{{ ::person.kansallisbiografia }}">Kansallisbiografia</a>
-              <a ng-if="::person.warsa" class="link" ng-href="http://www.sotasampo.fi/fi/persons/?uri={{ ::person.warsa }}">Sotasampo</a>
-              <a ng-if="::person.kirjasampo" class="link" ng-href="{{ ::person.kirjasampo }}">Kirjasampo</a>
-              <a ng-if="::person.blf" class="link" ng-href="{{ ::person.blf }}">BLF</a>
-              <a ng-if="::person.ulan" class="link" ng-href="{{ ::person.ulan }}">ULAN</a>
-              <a ng-if="::person.viaf" class="link" ng-href="{{ ::person.viaf }}">VIAF</a>
+              <a class="link" ng-if="::person.wikipedia" ng-href="{{ ::person.wikipedia }}">Wikipedia</a>
+              <a class="link" ng-if="::person.kansallisbiografia" ng-href="{{ ::person.kansallisbiografia }}">Kansallisbiografia</a>
+              <a class="link" ng-if="::person.warsa" ng-href="http://www.sotasampo.fi/fi/persons/?uri={{ ::person.warsa }}">Sotasampo</a>
+              <a class="link" ng-if="::person.kirjasampo" ng-href="{{ ::person.kirjasampo }}">Kirjasampo</a>
+              <a class="link" ng-if="::person.kulttuurisampo" ng-href="{{ ::person.kulttuurisampo }}">Kulttuurisampo</a>
+              <a class="link" ng-if="::person.blf" ng-href="{{ ::person.blf }}">BLF</a>
+              <a class="link" ng-if="::person.ulan" ng-href="{{ ::person.ulan }}">ULAN</a>
+              <a class="link" ng-if="::person.viaf" ng-href="{{ ::person.viaf }}">VIAF</a>
+              <a class="link" ng-if="::person.genicom" ng-href="{{ ::person.genicom }}">Kotisivu (Geni.com)</a>
+              <a class="link" ng-if="::person.genitree" ng-href="{{ ::person.genitree }}">Sukupuu (Geni.com)</a>
               <button class="page-btn btn btn-default" ng-click="::vm.openPage(person)">Avaa matrikkelisivu</button>
               <button class="btn btn-default" ng-click="showText = !showText">Näytä matrikkeliteksti</button>
               <div uib-collapse="!showText">
@@ -48,3 +52,4 @@
     </div>
   </div>
 </div>
+<img class="loading-img" src="images/loading-lg.gif" ng-if="vm.isLoadingResults"></img>

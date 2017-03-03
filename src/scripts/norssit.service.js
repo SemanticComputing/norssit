@@ -221,8 +221,8 @@
         // querying the endpoint, and mapping the results to objects.
         var resultHandler = new FacetResultHandler(endpointUrl, resultOptions);
 
-        function getResults(facetSelections) {
-            return resultHandler.getResults(facetSelections, '?ordinal ?id');
+        function getResults(facetSelections, sortBy) {
+            return resultHandler.getResults(facetSelections, sortBy || '?ordinal ?id');
         }
 
         function getFacets() {

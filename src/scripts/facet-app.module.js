@@ -10,7 +10,8 @@
         'seco.facetedSearch',
         'ngTable',
         'angular.filter',
-        'infinite-scroll'
+        'ngAnimate',
+        'ui.bootstrap'
     ])
 
     .constant('_', _) // eslint-disable-line no-undef
