@@ -30,7 +30,7 @@
         vm.isScrollDisabled = isScrollDisabled;
         vm.removeFacetSelections = removeFacetSelections;
         vm.sortBy = sortBy;
-        vm.getSortClass = getSortClass;
+        vm.getSortClass = norssitService.getSortClass;
 
         vm.people = [];
 
@@ -96,38 +96,8 @@
         }
 
         function sortBy(sortBy) {
-            var sort = $location.search().sortBy;
-            if (sort === sortBy) {
-                $location.search('desc', $location.search().desc ? null : true);
-            }
-            $location.search('sortBy', sortBy);
+            norssitService.updateSortBy(sortBy);
             return fetchResults({ constraint: vm.previousSelections });
-        }
-
-        function getSortBy() {
-            var sortBy = $location.search().sortBy;
-            if (!_.isString(sortBy)) {
-                sortBy = '?ordinal';
-            }
-            var sort;
-            if ($location.search().desc) {
-                sort = 'DESC(' + sortBy + ')';
-            } else {
-                sort = sortBy;
-            }
-            return sortBy === '?ordinal' ? sort : sort + ' ?ordinal';
-        }
-
-        function getSortClass(sortBy, numeric) {
-            var sort = $location.search().sortBy;
-            var cls = numeric ? 'glyphicon-sort-by-order' : 'glyphicon-sort-by-alphabet';
-
-            if (sort === sortBy) {
-                if ($location.search().desc) {
-                    return cls + '-alt';
-                }
-                return cls;
-            }
         }
 
         function updateResults(event, facetSelections) {
@@ -150,7 +120,7 @@
             latestUpdate = updateId;
 
             nextPageNo = 0;
-            norssitService.getResults(facetSelections, getSortBy())
+            norssitService.getResults(facetSelections)
             .then(function(pager) {
                 return pager.getMaxPageNo().then(function(no) {
                     return [pager, no];

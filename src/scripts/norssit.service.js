@@ -8,7 +8,7 @@
     .service('norssitService', norssitService);
 
     /* @ngInject */
-    function norssitService($q, _, FacetResultHandler) {
+    function norssitService($q, $location, _, FacetResultHandler) {
 
         /* Public API */
 
@@ -21,6 +21,10 @@
         // Get the facet options.
         // Return an object.
         this.getFacetOptions = getFacetOptions;
+        // Update sorting URL params.
+        this.updateSortBy = updateSortBy;
+        // Get the CSS class for the sort icon.
+        this.getSortClass = getSortClass;
 
         /* Implementation */
 
@@ -222,8 +226,8 @@
         // querying the endpoint, and mapping the results to objects.
         var resultHandler = new FacetResultHandler(endpointUrl, resultOptions);
 
-        function getResults(facetSelections, sortBy) {
-            return resultHandler.getResults(facetSelections, sortBy || '?ordinal ?id');
+        function getResults(facetSelections) {
+            return resultHandler.getResults(facetSelections, getSortBy());
         }
 
         function getFacets() {
@@ -233,6 +237,40 @@
 
         function getFacetOptions() {
             return facetOptions;
+        }
+
+        function updateSortBy(sortBy) {
+            var sort = $location.search().sortBy || '?ordinal';
+            if (sort === sortBy) {
+                $location.search('desc', $location.search().desc ? null : true);
+            }
+            $location.search('sortBy', sortBy);
+        }
+
+        function getSortBy() {
+            var sortBy = $location.search().sortBy;
+            if (!_.isString(sortBy)) {
+                sortBy = '?ordinal';
+            }
+            var sort;
+            if ($location.search().desc) {
+                sort = 'DESC(' + sortBy + ')';
+            } else {
+                sort = sortBy;
+            }
+            return sortBy === '?ordinal' ? sort : sort + ' ?ordinal';
+        }
+
+        function getSortClass(sortBy, numeric) {
+            var sort = $location.search().sortBy || '?ordinal';
+            var cls = numeric ? 'glyphicon-sort-by-order' : 'glyphicon-sort-by-alphabet';
+
+            if (sort === sortBy) {
+                if ($location.search().desc) {
+                    return cls + '-alt';
+                }
+                return cls;
+            }
         }
     }
 })();
