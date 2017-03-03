@@ -16,8 +16,8 @@
     .controller('CardsController', CardsController);
 
     /* @ngInject */
-    function CardsController($scope, $state, $uibModal, _, RESULTS_PER_PAGE,
-                norssitService, FacetHandler, facetUrlStateHandlerService) {
+    function CardsController($scope, $state, $uibModal, _, norssitService, FacetHandler,
+            facetUrlStateHandlerService) {
 
         var vm = this;
 
@@ -76,7 +76,7 @@
 
             vm.isLoadingResults = true;
             if (nextPageNo++ <= maxPage) {
-                vm.pager.getPage(nextPageNo-1)
+                vm.pager.getPage(nextPageNo-1, 24)
                 .then(function(page) {
                     if (updateId !== latestPageUpdate) {
                         return;
