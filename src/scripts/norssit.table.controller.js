@@ -24,6 +24,8 @@
         vm.openPage = openPage;
         vm.toArray = toArray;
         vm.removeFacetSelections = removeFacetSelections;
+        vm.sortBy = sortBy;
+        vm.getSortClass = norssitService.getSortClass;
 
         var initListener = $scope.$on('sf-initial-constraints', function(event, config) {
             updateResults(event, config);
@@ -90,6 +92,12 @@
 
         function updateResults(event, facetSelections) {
             facetUrlStateHandlerService.updateUrlParams(facetSelections);
+            vm.previousSelections = _.clone(facetSelections.constraint);
+
+            return fetchResults(facetSelections);
+        }
+
+        function fetchResults(facetSelections) {
             vm.isLoadingResults = true;
 
             norssitService.getResults(facetSelections)
@@ -102,6 +110,11 @@
                     initializeTable();
                 }
             });
+        }
+
+        function sortBy(sortBy) {
+            norssitService.updateSortBy(sortBy);
+            return fetchResults({ constraint: vm.previousSelections });
         }
     }
 })();
