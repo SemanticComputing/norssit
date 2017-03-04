@@ -11,7 +11,8 @@
         'ngTable',
         'angular.filter',
         'ngAnimate',
-        'ui.bootstrap'
+        'ui.bootstrap',
+        'infinite-scroll'
     ])
 
     .constant('_', _) // eslint-disable-line no-undef
