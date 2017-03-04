@@ -85,7 +85,7 @@ a.no-style {
 }
 
 .page-btn {
-  margin-top: 10px;
+  width: 170px;
 }
 
 .person-panel {
@@ -96,8 +96,8 @@ a.no-style {
     margin-bottom: 2px;
   }
 
-.person-profile-img {
-    min-height: 250px;
+.person-profile-img img {
+    height: 250px;
 }
 
 .vertical-center {

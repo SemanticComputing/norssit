@@ -189,6 +189,7 @@
         '  OPTIONAL { ?id norssit:genitree ?genitree . }' +
         '  OPTIONAL { ?id norssit:genicom ?genicom . }' +
         '  OPTIONAL { ?id norssit:sls_biografi ?blf . }' +
+        '  OPTIONAL { ?id ^bioc:title_inheres_in/a/skos:prefLabel ?occupation . }' +
         '  OPTIONAL { ' +
         '  	?id bioc:has_family_relation [' +
         '    	bioc:inheres_in ?relative__id ;' +
