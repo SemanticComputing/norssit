@@ -178,52 +178,18 @@
         '  { ' +
         '    <RESULT_SET> ' +
         '  } ' +
-        '  OPTIONAL { ?id schema:givenName ?givenName . }' +
-        '  OPTIONAL { ?id schema:familyName ?familyName . }' +
-        '  OPTIONAL { ?id person_registry:birthPlace ?birthPlace . } ' +
-        '  OPTIONAL { ?id norssit:ordinal ?ordinal . } ' +
         '  OPTIONAL { ?id schema:birthDate ?birthDate . }' +
         '  OPTIONAL { ?id schema:deathDate ?deathDate . }' +
+        '  OPTIONAL { ?id person_registry:birthPlace ?birthPlace . } ' +
         '  OPTIONAL { ?id person_registry:enrollmentYear ?enrollmentYear . }' +
         '  OPTIONAL { ?id person_registry:matriculationYear ?matriculationYear . }' +
         '  OPTIONAL { ' +
         '   ?id schema:hobby ?hobby_id . ' +
         '   BIND(REPLACE(STR(?hobby_id), "http://ldf.fi/hobbies/", "") AS ?hobby) ' +
         '  }' +
-     /*   '  OPTIONAL { ?id schema:image ?image . }' +
-        '  OPTIONAL { ?id dct:description ?description . }' +
-        '  OPTIONAL { ?id person_registry:pageNumber ?pageNumber . }' +
-        '  OPTIONAL { ?id person_registry:pageImageURL ?pageImageURL . }' +
-        '  OPTIONAL { ?id person_registry:relatedNorssi ?relatedNorssi . }' +
-        '  OPTIONAL { ?id person_registry:entryText ?entryText . }' +
-        '  OPTIONAL { ?id norssit:wikipedia ?wikipedia . }' +
-        '  OPTIONAL { ?id norssit:viaf ?viaf . }' +
-        '  OPTIONAL { ?id norssit:kansallisbiografia ?kansallisbiografia . }' +
-        '  OPTIONAL { ?id norssit:wikidata ?wikidata . }' +
-        '  OPTIONAL { ?id norssit:ulan ?ulan . }' +
-        '  OPTIONAL { ?id norssit:warsa ?warsa . }' +
-        '  OPTIONAL { ?id norssit:kirjasampo ?kirjasampo . }' +
-        '  OPTIONAL { ?id norssit:kulttuurisampo ?kulttuurisampo . }' +
-        '  OPTIONAL { ?id norssit:kb ?kb . }' +
-        '  OPTIONAL { ?id norssit:genitree ?genitree . }' +
-        '  OPTIONAL { ?id norssit:genicom ?genicom . }' +
-        '  OPTIONAL { ?id norssit:sls_biografi ?blf . }' + */
         '  OPTIONAL { ?id ^bioc:title_inheres_in/a/skos:prefLabel ?occupation . }' +
+        '  OPTIONAL { ?id ^bioc:education_inheres_in/a/skos:prefLabel ?education . } ' +
         '  OPTIONAL { ?id ^bioc:title_inheres_in/bioc:relates_to/skos:prefLabel ?organization . }' +
-   /* '  OPTIONAL { ' +
-        '  	?id bioc:has_family_relation [' +
-        '    	bioc:inheres_in ?relative__id ;' +
-        '      	a/skos:prefLabel ?relative__type ] .' +
-        '    	FILTER (LANG(?relative__type)="fi")' +
-        '    	?relative__id schema:familyName ?relative__familyName ; schema:givenName ?relative__givenName .' +
-        '		BIND (replace(concat(?relative__givenName," ",?relative__familyName),"[(][^)]+[)]\s*","") AS ?relative__name) ' +
-        '  }' + 
-        '  OPTIONAL { ' +
-        '    ?ach rdfs:subPropertyOf* nach:involved_in .' +
-        '    ?id ?ach ?achievement__id . ' +
-        '    ?achievement__id skos:prefLabel ?achievement__label .' +
-        '    ?achievement__id norssit:wikipedia|norssit:www ?achievement__wikipedia .' +
-        '  }' + */ 
         ' }';
 
         // The SPARQL endpoint URL

@@ -61,6 +61,7 @@
             	// console.log(people); 
             	google.charts.setOnLoadCallback(drawOccupation);
             	google.charts.setOnLoadCallback(drawOrganization);
+            	google.charts.setOnLoadCallback(drawEducation);
             	google.charts.setOnLoadCallback(drawEnrollmentYear);
             	google.charts.setOnLoadCallback(drawMatriculationYear);
             	google.charts.setOnLoadCallback(drawbirthPlace);
@@ -79,6 +80,10 @@
         
         function drawOccupation() {
         	drawPieChart('occupation', 'Arvo tai ammatti', 'chart_occupation');
+        }
+        
+        function drawEducation() {
+        	drawPieChart('education', 'Koulutus', 'chart_education');
         }
         
         function drawHobbies() {
