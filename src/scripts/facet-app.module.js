@@ -40,6 +40,12 @@
             templateUrl: 'views/norssit.list.html',
             controller: 'CardsController',
             controllerAs: 'vm'
+        })
+        .state('visu', {
+            url: '/visualisointi',
+            templateUrl: 'views/norssit.visu.html',
+            controller: 'VisuController',
+            controllerAs: 'vm'
         });
     });
 })();
