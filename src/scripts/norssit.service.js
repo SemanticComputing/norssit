@@ -182,6 +182,7 @@
         '  OPTIONAL { ?id schema:familyName ?familyName . }' +
         '  OPTIONAL { ?id person_registry:birthPlace ?birthPlace . } ' +
         '  OPTIONAL { ?id norssit:ordinal ?ordinal . } ' +
+        '  OPTIONAL { ?id norssit:register_id ?registerNumber . } ' +
         '  OPTIONAL { ?id schema:birthDate ?birthDate . }' +
         '  OPTIONAL { ?id schema:deathDate ?deathDate . }' +
         '  OPTIONAL { ' +
@@ -217,7 +218,7 @@
         '    	FILTER (LANG(?relative__type)="fi")' +
         '    	?relative__id schema:familyName ?relative__familyName ; schema:givenName ?relative__givenName .' +
         '		BIND (replace(concat(?relative__givenName," ",?relative__familyName),"[(][^)]+[)]\s*","") AS ?relative__name) ' +
-        '  }' + 
+        '  }' +
         '  OPTIONAL { ' +
         '    ?ach rdfs:subPropertyOf* nach:involved_in .' +
         '    ?id ?ach ?achievement__id . ' +
@@ -232,8 +233,7 @@
         var facetOptions = {
             endpointUrl: endpointUrl,
             rdfClass: '<http://xmlns.com/foaf/0.1/Person>',
-            constraint: '?id <http://ldf.fi/norssit/ordinal> ?ordinal . ' +
-                'OPTIONAL { ?id <http://schema.org/familyName> ?familyName . }',
+            constraint: '?id <http://ldf.fi/norssit/ordinal> ?ordinal . ?id <http://schema.org/familyName> ?familyName .',
             preferredLang : 'fi'
         };
 

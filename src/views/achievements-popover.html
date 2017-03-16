@@ -1,3 +1,5 @@
-<div>
-  <p ng-repeat="achievement in vm.toArray(person.achievement)"><a ng-href="{{ achievement.wikipedia }}">{{ achievement.label }}</a></p>
+<div class="achievement-list">
+  <ul class="list-unstyled">
+    <li ng-repeat="achievement in vm.toArray(person.achievement)"><a ng-href="{{ achievement.wikipedia }}">{{ achievement.label }}</a></li>
+  </ul>
 </div>

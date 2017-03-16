@@ -93,11 +93,11 @@ a.no-style {
 
 }
 .person-panel p {
-    margin-bottom: 2px;
-  }
+  margin-bottom: 2px;
+}
 
 .person-profile-img img {
-    height: 250px;
+  height: 250px;
 }
 
 .vertical-center {
@@ -106,6 +106,12 @@ a.no-style {
 }
 
 .sort {
-    display: inline-block;
-    width: 140px;
+  display: inline-block;
+  width: 140px;
+}
+
+.icon-menu a {
+  color: inherit;
+  font-size: 150%;
+  padding-right: 5px;
 }
