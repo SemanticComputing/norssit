@@ -21,6 +21,7 @@
         var vm = this;
    
         vm.people = []; 
+        vm.startYear = [];
 		  vm.removeFacetSelections = removeFacetSelections;
 
 		  google.charts.load('current', {packages: ['corechart', 'line']});
@@ -77,8 +78,6 @@
         function drawEnrollmentYear() {drawHistoChart('enrollmentYear', 'Aloitusvuosi', 'chart_enrollmentYear')}
         
         
-        
-        
         function drawPieChart(prop, label, target) {
         	
         	var arr = countByProperty(vm.people, prop),
@@ -88,7 +87,7 @@
             	options = { title: label },
             	
             	chart = new google.visualization.PieChart(document.getElementById(target));
-
+        	
             chart.draw(data, options);
         }
         
@@ -100,18 +99,20 @@
 				    title: label,
 				    legend: { position: 'none' },
 				    colors: ['green'],
-				    histogram: { bucketSize: 1.0, hideBucketItems: true, maxNumBuckets:125 },
+				    histogram: { bucketSize: 1.0, hideBucketItems: true, maxNumBuckets:150 },
 				    hAxis: {
 				    	slantedText:false, 
 				    	maxAlternation: 1, 
 				    	format: '' 
-				    	}
+				    	},
+			    	width: '95%', 
+			    	height:500
 				  },
 			
 				chart = new google.visualization.Histogram(document.getElementById(target));
 		  
 			data.addColumn('number');
-			data.addRows(countByYear(vm.people, prop));
+			data.addRows(countByYear(vm.years, prop));
 		  
 			chart.draw(data, options);
 		}
@@ -124,25 +125,15 @@
 		
     	
 		function countByYear(data, prop) {
-			var res = {};
+			var res = [];
 			
 			$.each(data, function( i, value ) {
 				if (value.hasOwnProperty(prop)) {
-					res[value['id']] = parseInt(value[prop]);
-				}
-			});
-			var resyears = {};
-			$.each(res, function( i, value ) {
-				if (resyears.hasOwnProperty(value)) {
-					resyears[value] += 1;
-				} else {
-					resyears[value] = 1;
+					res.push([parseInt(value[prop])]);
 				}
 			});
 			
-			return $.map( res, function( value, key ) {
-				return [[value]];
-			});
+			return res ;
     	}
 		
 		function countProperties(data, prop) {
@@ -150,13 +141,12 @@
 			
 			$.each(data, function( i, value ) {
 				if (value.hasOwnProperty(prop)) {
-					var y=value[prop],
-						c=parseInt(value['count']);
+					var y=value[prop];
 					
 					if (res.hasOwnProperty(y)) {
-						res[y] += c;
+						res[y] += 1;
 					} else {
-						res[y] = c;
+						res[y] = 1;
 					}
 				}
 			});
@@ -171,18 +161,21 @@
         function fetchResults(facetSelections) {
             vm.isLoadingResults = true;
             vm.people = [];
+            vm.years = [];
             vm.error = undefined;
 
             var updateId = _.uniqueId();
             latestUpdate = updateId;
 
+            
             return norssitVisuService.getResults(facetSelections).then(function(res) {
             	if (latestUpdate !== updateId) {
                     return;
                 }
                
                 vm.isLoadingResults = false;
-                vm.people = res;
+                vm.people = res[0];
+                vm.years = res[1];
                 return res;
             }).catch(handleError);
         }

@@ -15,6 +15,8 @@
         // Get the results based on facet selections.
         // Return a promise.
         this.getResults = getResults;
+        this.getResults1 = getResults1;
+        this.getResults2 = getResults2;
         // Get the facets.
         // Return a promise (because of translation).
         this.getFacets = getFacets;
@@ -170,18 +172,23 @@
         // The query for the results.
         // ?id is bound to the norssit URI.
         var query = prefixes +
-        	'  SELECT ?enrollmentYear ?matriculationYear ?occupation ?education ?organization ?id ?count' +
+        	'  SELECT distinct ?occupation ?education ?organization ?id ' +
             '  WHERE {' +
             '  	 { <RESULT_SET> } ' +
-            '    ?id a foaf:Person' +
-            '    OPTIONAL { ?id person_registry:enrollmentYear ?enrollmentYear . }' +
-            '    OPTIONAL { ?id person_registry:matriculationYear ?matriculationYear . }' +
             '    OPTIONAL { ?id ^bioc:title_inheres_in/a/skos:prefLabel ?occupation . }' +
             '    OPTIONAL { ?id ^bioc:education_inheres_in/a/skos:prefLabel ?education . }' +
             '	 OPTIONAL { ?id ^bioc:title_inheres_in/bioc:relates_to/skos:prefLabel ?organization . }' +
-            '    bind (1 AS ?count)' +
-            '  } '
+            '  } ';
+            
+       var queryYears = prefixes +
+        	'  SELECT ?enrollmentYear ?matriculationYear ' +
+            '  WHERE {' +
+            '  	 { <RESULT_SET> } ' +
+            '    OPTIONAL { ?id person_registry:enrollmentYear ?enrollmentYear . }' +
+            '    OPTIONAL { ?id person_registry:matriculationYear ?matriculationYear . }' +
+            '  } ';
 
+        
         // The SPARQL endpoint URL
         var endpointUrl = 'https://ldf.fi/norssit/sparql';
 
@@ -193,12 +200,23 @@
 
         var endpoint = new AdvancedSparqlService(endpointUrl, objectMapperService);
         
-        function getResults(facetSelections) {
-        	var cons = facetSelections.constraint.join(' ');
-        	return endpoint.getObjectsNoGrouping(query.replace("<RESULT_SET>", cons));
-            // return resultHandler.getResults(facetSelections, getSortBy());
+        function getResults1(facetSelections) {
+        	var q2 = query.replace("<RESULT_SET>", facetSelections.constraint.join(' '));
+        	return endpoint.getObjectsNoGrouping(q2);
         }
-
+        
+        function getResults2(facetSelections) {
+        	var cons = facetSelections.constraint.join(' ');
+        	return endpoint.getObjectsNoGrouping(queryYears.replace("<RESULT_SET>", cons));
+        }
+        
+        function getResults(facetSelections) {
+        	var promises = [
+            	this.getResults1(facetSelections),
+            	this.getResults2(facetSelections)
+            ];
+        	return $q.all(promises);
+        }
         function getFacets() {
             var facetsCopy = angular.copy(facets);
             return $q.when(facetsCopy);
