@@ -8,7 +8,7 @@
     .service('norssitVisuService', norssitVisuService);
 
     /* @ngInject */
-    function norssitVisuService($q, $location, _, FacetResultHandler) {
+    function norssitVisuService($q, $location, _, AdvancedSparqlService, objectMapperService) {
 
         /* Public API */
 
@@ -21,11 +21,6 @@
         // Get the facet options.
         // Return an object.
         this.getFacetOptions = getFacetOptions;
-        // Update sorting URL params.
-        this.updateSortBy = updateSortBy;
-        // Get the CSS class for the sort icon.
-        this.getSortClass = getSortClass;
-
         /* Implementation */
 
         var facets = {
@@ -166,6 +161,7 @@
         ' PREFIX schema: <http://schema.org/> ' +
         ' PREFIX schemax: <http://topbraid.org/schemax/> ' +
         ' PREFIX dct: <http://purl.org/dc/terms/> ' +
+        ' PREFIX foaf: <http://xmlns.com/foaf/0.1/> ' +
         ' PREFIX skos: <http://www.w3.org/2004/02/skos/core#> ' +
         ' PREFIX xml: <http://www.w3.org/XML/1998/namespace> ' +
         ' PREFIX bioc: <http://ldf.fi/schema/bioc/> ' +
@@ -173,24 +169,18 @@
 
         // The query for the results.
         // ?id is bound to the norssit URI.
-        var query =
-        ' SELECT DISTINCT * WHERE {' +
-        '  { ' +
-        '    <RESULT_SET> ' +
-        '  } ' +
-        '  OPTIONAL { ?id schema:birthDate ?birthDate . }' +
-        '  OPTIONAL { ?id schema:deathDate ?deathDate . }' +
-        '  OPTIONAL { ?id person_registry:birthPlace ?birthPlace . } ' +
-        '  OPTIONAL { ?id person_registry:enrollmentYear ?enrollmentYear . }' +
-        '  OPTIONAL { ?id person_registry:matriculationYear ?matriculationYear . }' +
-        '  OPTIONAL { ' +
-        '   ?id schema:hobby ?hobby_id . ' +
-        '   BIND(REPLACE(STR(?hobby_id), "http://ldf.fi/hobbies/", "") AS ?hobby) ' +
-        '  }' +
-        '  OPTIONAL { ?id ^bioc:title_inheres_in/a/skos:prefLabel ?occupation . }' +
-        '  OPTIONAL { ?id ^bioc:education_inheres_in/a/skos:prefLabel ?education . } ' +
-        '  OPTIONAL { ?id ^bioc:title_inheres_in/bioc:relates_to/skos:prefLabel ?organization . }' +
-        ' }';
+        var query = prefixes +
+        	'  SELECT ?enrollmentYear ?matriculationYear ?occupation ?education ?organization ?id ?count' +
+            '  WHERE {' +
+            '  	 { <RESULT_SET> } ' +
+            '    ?id a foaf:Person' +
+            '    OPTIONAL { ?id person_registry:enrollmentYear ?enrollmentYear . }' +
+            '    OPTIONAL { ?id person_registry:matriculationYear ?matriculationYear . }' +
+            '    OPTIONAL { ?id ^bioc:title_inheres_in/a/skos:prefLabel ?occupation . }' +
+            '    OPTIONAL { ?id ^bioc:education_inheres_in/a/skos:prefLabel ?education . }' +
+            '	 OPTIONAL { ?id ^bioc:title_inheres_in/bioc:relates_to/skos:prefLabel ?organization . }' +
+            '    bind (1 AS ?count)' +
+            '  } '
 
         // The SPARQL endpoint URL
         var endpointUrl = 'https://ldf.fi/norssit/sparql';
@@ -198,23 +188,15 @@
         var facetOptions = {
             endpointUrl: endpointUrl,
             rdfClass: '<http://xmlns.com/foaf/0.1/Person>',
-            constraint: '?id <http://ldf.fi/norssit/ordinal> ?ordinal . ' +
-                'OPTIONAL { ?id <http://schema.org/familyName> ?familyName . }',
             preferredLang : 'fi'
         };
 
-        var resultOptions = {
-            queryTemplate: query,
-            prefixes: prefixes,
-            pagesPerQuery: 2 // get two pages of results per query
-        };
-
-        // The FacetResultHandler handles forming the final queries for results,
-        // querying the endpoint, and mapping the results to objects.
-        var resultHandler = new FacetResultHandler(endpointUrl, resultOptions);
-
+        var endpoint = new AdvancedSparqlService(endpointUrl, objectMapperService);
+        
         function getResults(facetSelections) {
-            return resultHandler.getResults(facetSelections, getSortBy());
+        	var cons = facetSelections.constraint.join(' ');
+        	return endpoint.getObjectsNoGrouping(query.replace("<RESULT_SET>", cons));
+            // return resultHandler.getResults(facetSelections, getSortBy());
         }
 
         function getFacets() {
@@ -226,38 +208,5 @@
             return facetOptions;
         }
 
-        function updateSortBy(sortBy) {
-            var sort = $location.search().sortBy || '?ordinal';
-            if (sort === sortBy) {
-                $location.search('desc', $location.search().desc ? null : true);
-            }
-            $location.search('sortBy', sortBy);
-        }
-
-        function getSortBy() {
-            var sortBy = $location.search().sortBy;
-            if (!_.isString(sortBy)) {
-                sortBy = '?ordinal';
-            }
-            var sort;
-            if ($location.search().desc) {
-                sort = 'DESC(' + sortBy + ')';
-            } else {
-                sort = sortBy;
-            }
-            return sortBy === '?ordinal' ? sort : sort + ' ?ordinal';
-        }
-
-        function getSortClass(sortBy, numeric) {
-            var sort = $location.search().sortBy || '?ordinal';
-            var cls = numeric ? 'glyphicon-sort-by-order' : 'glyphicon-sort-by-alphabet';
-
-            if (sort === sortBy) {
-                if ($location.search().desc) {
-                    return cls + '-alt';
-                }
-                return cls;
-            }
-        }
     }
 })();

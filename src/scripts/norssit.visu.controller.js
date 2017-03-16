@@ -59,44 +59,24 @@
             facetUrlStateHandlerService.updateUrlParams(facetSelections);
             return fetchResults(facetSelections).then(function (people) {
             	// console.log(people); 
-            	google.charts.setOnLoadCallback(drawOccupation);
-            	google.charts.setOnLoadCallback(drawOrganization);
-            	google.charts.setOnLoadCallback(drawEducation);
-            	google.charts.setOnLoadCallback(drawEnrollmentYear);
-            	google.charts.setOnLoadCallback(drawMatriculationYear);
-            	google.charts.setOnLoadCallback(drawbirthPlace);
-            	google.charts.setOnLoadCallback(drawHobbies);
+            	google.charts.setOnLoadCallback(function () { drawPieChart('occupation', 'Arvo tai ammatti', 'chart_occupation'); });
+            	google.charts.setOnLoadCallback(function () { drawPieChart('organization', 'Työpaikka tai oppilaitos', 'chart_organization'); });
+            	google.charts.setOnLoadCallback(function () { drawPieChart('education', 'Koulutus', 'chart_education'); });
+            	google.charts.setOnLoadCallback(function () { drawHistoChart('enrollmentYear', 'Aloitusvuosi', 'chart_enrollmentYear')});
+            	google.charts.setOnLoadCallback(function () { drawHistoChart('matriculationYear', 'Valmistumisvuosi', 'chart_matriculationYear') });
+            	// google.charts.setOnLoadCallback(drawbirthPlace);
+            	// google.charts.setOnLoadCallback(drawHobbies);
             	return;
 	         });
         }
 
-        function drawbirthPlace() {
-        	drawPieChart('birthPlace', 'Synnyinpaikka', 'chart_birthPlace');
-        }
+        function drawbirthPlace() { drawPieChart('birthPlace', 'Synnyinpaikka', 'chart_birthPlace'); }
         
-        function drawOrganization() {
-        	drawPieChart('organization', 'Työpaikka tai oppilaitos', 'chart_organization');
-        }
+        function drawHobbies() { drawPieChart('hobby', 'Harrastukset', 'chart_hobbies');}
         
-        function drawOccupation() {
-        	drawPieChart('occupation', 'Arvo tai ammatti', 'chart_occupation');
-        }
+        function drawEnrollmentYear() {drawHistoChart('enrollmentYear', 'Aloitusvuosi', 'chart_enrollmentYear')}
         
-        function drawEducation() {
-        	drawPieChart('education', 'Koulutus', 'chart_education');
-        }
         
-        function drawHobbies() {
-        	drawPieChart('hobby', 'Harrastukset', 'chart_hobbies');
-        }
-        
-        function drawEnrollmentYear() {
-        	drawLineChart('enrollmentYear', 'Aloitusvuosi', 'chart_enrollmentYear')
-        }
-        
-        function drawMatriculationYear() {
-        	drawLineChart('matriculationYear', 'Valmistumisvuosi', 'chart_matriculationYear')
-        }
         
         
         function drawPieChart(prop, label, target) {
@@ -113,17 +93,24 @@
         }
         
         
-		function drawLineChart(prop, label, target) {
+		function drawHistoChart(prop, label, target) {
 			var data = new google.visualization.DataTable(),
 	
 				options = {
-						title: label
-					},
+				    title: label,
+				    legend: { position: 'none' },
+				    colors: ['green'],
+				    histogram: { bucketSize: 1.0, hideBucketItems: true, maxNumBuckets:125 },
+				    hAxis: {
+				    	slantedText:false, 
+				    	maxAlternation: 1, 
+				    	format: '' 
+				    	}
+				  },
 			
-				chart = new google.visualization.LineChart(document.getElementById(target));
+				chart = new google.visualization.Histogram(document.getElementById(target));
 		  
-			data.addColumn('number', 'X');
-			data.addColumn('number', 'Henkilöä');
+			data.addColumn('number');
 			data.addRows(countByYear(vm.people, prop));
 		  
 			chart.draw(data, options);
@@ -135,47 +122,42 @@
 				.sort(function(a, b){ return b[1]-a[1] });
     	}
 		
-		
-		function countByYear(people, prop) {
-			var arr = countProperties(people, prop),
-				res={},
-				minY=2017, maxY=0;
+    	
+		function countByYear(data, prop) {
+			var res = {};
 			
-			$.each(arr, function( i, value ) {
-				var y=parseInt(value[0]);
-				if (y<minY) minY=y;
-				if (y>maxY) maxY=y;
-				res[y]=value[1];
+			$.each(data, function( i, value ) {
+				if (value.hasOwnProperty(prop)) {
+					res[value['id']] = parseInt(value[prop]);
+				}
+			});
+			var resyears = {};
+			$.each(res, function( i, value ) {
+				if (resyears.hasOwnProperty(value)) {
+					resyears[value] += 1;
+				} else {
+					resyears[value] = 1;
+				}
 			});
 			
-			//	fill years with value of zero:
-			for (var y=minY; y<=maxY; y++) {
-				if (!(res.hasOwnProperty(y))) {
-					res[y]=0;
-				}
-			}
-			
-			return $
-				.map( res, function( value, key ) { return [[parseInt(key), value]]; })	
-				.sort(function(a, b){ return a[0]-b[0] });
-			
+			return $.map( res, function( value, key ) {
+				return [[value]];
+			});
     	}
-    	
+		
 		function countProperties(data, prop) {
 			var res = {};
 			
 			$.each(data, function( i, value ) {
 				if (value.hasOwnProperty(prop)) {
-					var arr=value[prop];
-					if (typeof arr === 'string') { arr=[arr]; }
+					var y=value[prop],
+						c=parseInt(value['count']);
 					
-					$.each(arr, function( i, y ) {
-						if (res.hasOwnProperty(y)) {
-							res[y] += 1;
-						} else {
-							res[y] = 1;
-						}
-					});
+					if (res.hasOwnProperty(y)) {
+						res[y] += c;
+					} else {
+						res[y] = c;
+					}
 				}
 			});
 			
@@ -183,6 +165,7 @@
 				return [[key, value]];
 			});
     	}
+		
 		
         var latestUpdate;
         function fetchResults(facetSelections) {
@@ -193,19 +176,8 @@
             var updateId = _.uniqueId();
             latestUpdate = updateId;
 
-            return norssitVisuService.getResults(facetSelections)
-            .then(function(pager) {
-            	return pager.getTotalCount().then(function (count) { 
-            		if (count>1000) {
-            			return $q.reject('Too many results.');
-            		}
-            		return pager;
-            	})  
-            })
-            .then(function(pager) {
-                return pager.getAllSequentially(5000);
-            }).then(function(res) {
-                if (latestUpdate !== updateId) {
+            return norssitVisuService.getResults(facetSelections).then(function(res) {
+            	if (latestUpdate !== updateId) {
                     return;
                 }
                
@@ -216,6 +188,7 @@
         }
 
         function handleError(error) {
+        	console.log(error)
             vm.isLoadingResults = false;
             vm.error = error;
         }
