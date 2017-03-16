@@ -34,7 +34,15 @@ a.no-style {
   padding: 2px;
 }
 
-@media (max-width: 1010px) {
+.navbar-brand {
+  font-size: inherit;
+}
+
+.navbar-brand span {
+  padding-right: 5px;
+}
+
+@media (max-width: 1297px) {
   .navbar-header {
     float: none;
   }
@@ -82,10 +90,6 @@ a.no-style {
 .show-facets {
   margin-top: -10px;
   padding-bottom: 10px;
-}
-
-.page-btn {
-  width: 170px;
 }
 
 .person-panel {
