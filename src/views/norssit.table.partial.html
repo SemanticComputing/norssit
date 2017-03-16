@@ -12,14 +12,17 @@
   <tr ng-show="!vm.isLoadingResults" ng-repeat="person in $data">
     <td class="person-image-container" data-title="'Nimi'">
       <div ng-class="::{ 'name-col col-md-12 col-lg-7': person.image }">
-        {{ ::person.givenName }} {{ ::person.familyName }} <br />
+        <b>{{ ::person.registerNumber }}. {{ ::person.givenName }} {{ ::person.familyName }}</b><br />
         {{ ::person.birthPlace }}
         <span ng-if="::(person.birthDate || person.deathDate)">
           {{ ::person.birthDate || '?' | date:'dd.MM.yyyy' }}
           <span ng-if=::person.deathDate>- {{ ::person.deathDate | date:'dd.MM.yyyy' }}</span>
           <br />
         </span>
-        <a ng-href="{{ ::person.id }}">Data</a>
+        <span class="icon-menu">
+          <a title="Avaa matrikkelisivu" href="" ng-click="::vm.openPage(person)"><span class="glyphicon glyphicon-book" aria-hidden="true"></span></a>
+          <a title="Data" class="" ng-href="{{ ::person.id }}"><span class="glyphicon glyphicon-hdd" aria-hidden="true"></span></a>
+        </span>
       </div>
       <div ng-if=::"person.image" class="name-col col-md-12 col-lg-5">
         <div ng-repeat="img in ::vm.toArray(person.image)"
@@ -71,9 +74,7 @@
       uib-popover-template="'views/register-text-popover.html'"
       popover-trigger="'mouseenter'"
       popover-append-to-body="true"
-      popover-placement="auto left">
-      <a class="no-style" href="" ng-click="::vm.openPage(person)">{{ ::person.entryText | truncate: 500 : '...' : true }}</a>
-    </td>
+      popover-placement="auto left">{{ ::person.entryText | truncate: 500 : '...' : true }}</td>
   </tr>
   </tbody>
 </table>
