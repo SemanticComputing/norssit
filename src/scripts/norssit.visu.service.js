@@ -219,7 +219,7 @@
 	    	'    WHERE { ' +
 	    	'      ?evt bioc:education_inheres_in|bioc:title_inheres_in ?id ; ' +
 	    	'           bioc:relates_to ?org . ' +
-	    	'        { ?id <http://ldf.fi/norssit/wikipedia> [] .  ?id a <http://xmlns.com/foaf/0.1/Person> .  } ' +
+	    	'        { <RESULT_SET> } ' +
 	    	'    } GROUP BY ?org ORDER BY desc(?no) LIMIT 5 ' +
 	    	'    } ' +
 	    	'    ?org skos:prefLabel ?label . ' +
@@ -227,7 +227,7 @@
 	    	'         bioc:education_inheres_in|bioc:title_inheres_in ?id ; ' +
 	    	'           bioc:relates_to ?org; ' +
 	    	'         schema:startDate ?year . ' +
-	    	'    { ?id <http://ldf.fi/norssit/wikipedia> [] .  ?id a <http://xmlns.com/foaf/0.1/Person> .  } ' +
+	    	'    { <RESULT_SET> } ' +
 	    	'  } GROUP BY ?label ?year ORDER by ?year ';
 	    
         // The SPARQL endpoint URL
