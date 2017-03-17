@@ -17,6 +17,9 @@
         this.getResults = getResults;
         this.getResults1 = getResults1;
         this.getResults2 = getResults2;
+        this.getResultsTopTitles = getResultsTopTitles;
+        this.getResultsTopOrgs = getResultsTopOrgs;
+        
         // Get the facets.
         // Return a promise (because of translation).
         this.getFacets = getFacets;
@@ -151,23 +154,23 @@
         };
 
         var prefixes =
-        ' PREFIX hobbies: <http://ldf.fi/hobbies/> ' +
-        ' PREFIX norssit: <http://ldf.fi/norssit/> ' +
-        ' PREFIX nach: <http://ldf.fi/norssit/achievements/> ' +
-        ' PREFIX owl: <http://www.w3.org/2002/07/owl#> ' +
-        ' PREFIX person_registry: <http://ldf.fi/schema/person_registry/> ' +
-        ' PREFIX places: <http://ldf.fi/places/> ' +
-        ' PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> ' +
-        ' PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> ' +
-        ' PREFIX relatives: <http://ldf.fi/relatives/> ' +
-        ' PREFIX schema: <http://schema.org/> ' +
-        ' PREFIX schemax: <http://topbraid.org/schemax/> ' +
-        ' PREFIX dct: <http://purl.org/dc/terms/> ' +
-        ' PREFIX foaf: <http://xmlns.com/foaf/0.1/> ' +
-        ' PREFIX skos: <http://www.w3.org/2004/02/skos/core#> ' +
-        ' PREFIX xml: <http://www.w3.org/XML/1998/namespace> ' +
-        ' PREFIX bioc: <http://ldf.fi/schema/bioc/> ' +
-        ' PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> ';
+	        ' PREFIX hobbies: <http://ldf.fi/hobbies/> ' +
+	        ' PREFIX norssit: <http://ldf.fi/norssit/> ' +
+	        ' PREFIX nach: <http://ldf.fi/norssit/achievements/> ' +
+	        ' PREFIX owl: <http://www.w3.org/2002/07/owl#> ' +
+	        ' PREFIX person_registry: <http://ldf.fi/schema/person_registry/> ' +
+	        ' PREFIX places: <http://ldf.fi/places/> ' +
+	        ' PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> ' +
+	        ' PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> ' +
+	        ' PREFIX relatives: <http://ldf.fi/relatives/> ' +
+	        ' PREFIX schema: <http://schema.org/> ' +
+	        ' PREFIX schemax: <http://topbraid.org/schemax/> ' +
+	        ' PREFIX dct: <http://purl.org/dc/terms/> ' +
+	        ' PREFIX foaf: <http://xmlns.com/foaf/0.1/> ' +
+	        ' PREFIX skos: <http://www.w3.org/2004/02/skos/core#> ' +
+	        ' PREFIX xml: <http://www.w3.org/XML/1998/namespace> ' +
+	        ' PREFIX bioc: <http://ldf.fi/schema/bioc/> ' +
+	        ' PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> ';
 
         // The query for the results.
         // ?id is bound to the norssit URI.
@@ -175,9 +178,10 @@
         	'  SELECT distinct ?occupation ?education ?organization ?id ' +
             '  WHERE {' +
             '  	 { <RESULT_SET> } ' +
-            '    OPTIONAL { ?id ^bioc:title_inheres_in/a/skos:prefLabel ?occupation . }' +
-            '    OPTIONAL { ?id ^bioc:education_inheres_in/a/skos:prefLabel ?education . }' +
-            '	 OPTIONAL { ?id ^bioc:title_inheres_in/bioc:relates_to/skos:prefLabel ?organization . }' +
+            '  	 ?evt bioc:education_inheres_in|bioc:title_inheres_in ?id . ' +
+            '    OPTIONAL { ?evt bioc:title_inheres_in ?id ; a/skos:prefLabel ?occupation . }' +
+            '    OPTIONAL { ?evt bioc:education_inheres_in ?id ; a/skos:prefLabel ?education . }' +
+            '    OPTIONAL { ?evt bioc:relates_to/skos:prefLabel ?organization . }' +
             '  } ';
             
        var queryYears = prefixes +
@@ -187,8 +191,45 @@
             '    OPTIONAL { ?id person_registry:enrollmentYear ?enrollmentYear . }' +
             '    OPTIONAL { ?id person_registry:matriculationYear ?matriculationYear . }' +
             '  } ';
-
+       
+        var queryTopTitles = prefixes + 
+	    	'  SELECT ?label ?year (count (distinct ?id) AS ?count)  ' +
+	    	'  WHERE { ' +
+	    	'    { ' +
+	    	'    SELECT ?class (count (distinct ?id) AS ?no) ' +
+	    	'    WHERE { ' +
+	    	'      ?class rdfs:subClassOf+ bioc:Title . ' +
+	    	'      ?evt a ?class ; ' +
+	    	'           bioc:title_inheres_in ?id . ' +
+	    	'        { <RESULT_SET> } ' +
+	    	'    } GROUP BY ?class ORDER BY desc(?no) LIMIT 5 ' +
+	    	'    } ' +
+	    	'    ?class skos:prefLabel ?label . ' +
+	    	'    ?evt a ?class ; ' +
+	    	'         bioc:title_inheres_in ?id ; ' +
+	    	'         schema:startDate ?year . ' +
+	    	'    { <RESULT_SET> } ' +
+	    	'  } GROUP BY ?label ?year ORDER by ?year ';
         
+        var queryTopOrgs = prefixes + 
+	        '  SELECT ?label ?year (count (distinct ?id) AS ?count)  ' +
+	    	'  WHERE { ' +
+	    	'    { ' +
+	    	'    SELECT ?org (count (distinct ?id) AS ?no) ' +
+	    	'    WHERE { ' +
+	    	'      ?evt bioc:education_inheres_in|bioc:title_inheres_in ?id ; ' +
+	    	'           bioc:relates_to ?org . ' +
+	    	'        { ?id <http://ldf.fi/norssit/wikipedia> [] .  ?id a <http://xmlns.com/foaf/0.1/Person> .  } ' +
+	    	'    } GROUP BY ?org ORDER BY desc(?no) LIMIT 5 ' +
+	    	'    } ' +
+	    	'    ?org skos:prefLabel ?label . ' +
+	    	'    ?evt a ?class ; ' +
+	    	'         bioc:education_inheres_in|bioc:title_inheres_in ?id ; ' +
+	    	'           bioc:relates_to ?org; ' +
+	    	'         schema:startDate ?year . ' +
+	    	'    { ?id <http://ldf.fi/norssit/wikipedia> [] .  ?id a <http://xmlns.com/foaf/0.1/Person> .  } ' +
+	    	'  } GROUP BY ?label ?year ORDER by ?year ';
+	    
         // The SPARQL endpoint URL
         var endpointUrl = 'https://ldf.fi/norssit/sparql';
 
@@ -210,13 +251,24 @@
         	return endpoint.getObjectsNoGrouping(queryYears.replace("<RESULT_SET>", cons));
         }
         
+        function getResultsTopTitles(facetSelections) {
+        	return endpoint.getObjectsNoGrouping(queryTopTitles.replace(/<RESULT_SET>/g, facetSelections.constraint.join(' ')));
+        }
+
+        function getResultsTopOrgs(facetSelections) {
+        	return endpoint.getObjectsNoGrouping(queryTopOrgs.replace(/<RESULT_SET>/g, facetSelections.constraint.join(' ')));
+        }
+        
         function getResults(facetSelections) {
         	var promises = [
             	this.getResults1(facetSelections),
-            	this.getResults2(facetSelections)
+            	this.getResults2(facetSelections),
+            	this.getResultsTopTitles(facetSelections),
+            	this.getResultsTopOrgs(facetSelections)
             ];
         	return $q.all(promises);
         }
+        
         function getFacets() {
             var facetsCopy = angular.copy(facets);
             return $q.when(facetsCopy);
