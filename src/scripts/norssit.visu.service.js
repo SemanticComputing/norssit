@@ -16,7 +16,7 @@
         // Return a promise.
         this.getResults = getResults;
         this.getResults1 = getResults1;
-        this.getResults2 = getResults2;
+        this.getResultsYears = getResultsYears;
         this.getResultsTopTitles = getResultsTopTitles;
         this.getResultsTopOrgs = getResultsTopOrgs;
         
@@ -185,12 +185,14 @@
             '  } ';
             
        var queryYears = prefixes +
-        	'  SELECT ?enrollmentYear ?matriculationYear ' +
-            '  WHERE {' +
-            '  	 { <RESULT_SET> } ' +
-            '    OPTIONAL { ?id person_registry:enrollmentYear ?enrollmentYear . }' +
-            '    OPTIONAL { ?id person_registry:matriculationYear ?matriculationYear . }' +
-            '  } ';
+		    'SELECT ?year ?index (count(distinct ?id) AS ?count)   ' +
+		   	'WHERE { ' +
+		   	'  { <RESULT_SET> } ' +
+		   	'  VALUES (?prop ?index) {  ' +
+		   	'    (person_registry:enrollmentYear 0)  ' +
+		   	'    (person_registry:matriculationYear 1) } ' +
+		   	'  ?id ?prop ?year .   ' +
+		   	'} GROUP BY ?year ?index ORDER BY ?year ';
        
         var queryTopTitles = prefixes + 
 	    	'  SELECT ?label ?year (count (distinct ?id) AS ?count)  ' +
@@ -242,13 +244,13 @@
         var endpoint = new AdvancedSparqlService(endpointUrl, objectMapperService);
         
         function getResults1(facetSelections) {
-        	var q2 = query.replace("<RESULT_SET>", facetSelections.constraint.join(' '));
-        	return endpoint.getObjectsNoGrouping(q2);
+        	return endpoint.getObjectsNoGrouping(query.replace("<RESULT_SET>", facetSelections.constraint.join(' ')));
         }
         
-        function getResults2(facetSelections) {
-        	var cons = facetSelections.constraint.join(' ');
-        	return endpoint.getObjectsNoGrouping(queryYears.replace("<RESULT_SET>", cons));
+        function getResultsYears(facetSelections) {
+        	var cons = facetSelections.constraint.join(' '),
+        		q = queryYears.replace("<RESULT_SET>", cons);
+        	return endpoint.getObjectsNoGrouping(q);
         }
         
         function getResultsTopTitles(facetSelections) {
@@ -262,7 +264,7 @@
         function getResults(facetSelections) {
         	var promises = [
             	this.getResults1(facetSelections),
-            	this.getResults2(facetSelections),
+            	this.getResultsYears(facetSelections),
             	this.getResultsTopTitles(facetSelections),
             	this.getResultsTopOrgs(facetSelections)
             ];

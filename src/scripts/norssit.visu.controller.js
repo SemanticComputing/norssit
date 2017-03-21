@@ -25,7 +25,8 @@
         vm.topTitles = [];
         vm.topOrgs = [];
 		vm.removeFacetSelections = removeFacetSelections;
-
+		vm.colors = [ '#B2AFAC', '#2A2820', '#E9E6D9', '#2D8815', '#CFB1A3', '#B36C4A', '#D79060', '#A65F35', '#577889', '#D3D4CE', '#333946', '#B3C8C5', '#92908D', '#C86D37', '#C8724C', '#3B654F', '#3B88A0', '#543024', '#AF9136', '#5E5924', '#D7CBB4', '#9C8E6E', '#5E635C', '#688B42', '#728E91', '#DFE1DB', '#028307', '#1F6A13', '#A69F97', '#8F7C83', '#946F61', '#EDEEEA' ];
+        
 		google.charts.load('current', {packages: ['corechart', 'line', 'sankey']});
 
         var initListener = $scope.$on('sf-initial-constraints', function(event, config) {
@@ -60,18 +61,16 @@
             vm.previousSelections = _.clone(facetSelections.constraint);
             facetUrlStateHandlerService.updateUrlParams(facetSelections);
             return fetchResults(facetSelections).then(function (people) {
-            	// console.log(people); 
+            	google.charts.setOnLoadCallback(function () { drawYearChart("0", 'Aloitusvuosi', 'chart_enrollmentYear')});
+            	google.charts.setOnLoadCallback(function () { drawYearChart("1", 'Valmistumisvuosi', 'chart_matriculationYear') });
+            	
             	google.charts.setOnLoadCallback(drawSankeyChart);
             	google.charts.setOnLoadCallback(function () { drawPieChart('occupation', 'Arvo tai ammatti', 'chart_occupation'); });
             	google.charts.setOnLoadCallback(function () { drawPieChart('organization', 'Työpaikka tai oppilaitos', 'chart_organization'); });
             	google.charts.setOnLoadCallback(function () { drawPieChart('education', 'Koulutus', 'chart_education'); });
-            	google.charts.setOnLoadCallback(function () { drawHistoChart('enrollmentYear', 'Aloitusvuosi', 'chart_enrollmentYear')});
-            	google.charts.setOnLoadCallback(function () { drawHistoChart('matriculationYear', 'Valmistumisvuosi', 'chart_matriculationYear') });
             	google.charts.setOnLoadCallback(function () { drawColumnChart(vm.topTitles, 'Viisi yleisintä virkaa vuosikymmenittäin', 'chart_topeducation') });
             	google.charts.setOnLoadCallback(function () { drawColumnChart(vm.topOrgs, 'Viisi suosituinta organisaatiota vuosikymmenittäin', 'chart_toporganization') });
             	
-            	// google.charts.setOnLoadCallback(drawbirthPlace);
-            	// google.charts.setOnLoadCallback(drawHobbies);
             	return;
 	         });
         }
@@ -80,7 +79,7 @@
         
         function drawHobbies() { drawPieChart('hobby', 'Harrastukset', 'chart_hobbies');}
         
-        function drawEnrollmentYear() {drawHistoChart('enrollmentYear', 'Aloitusvuosi', 'chart_enrollmentYear')}
+        function drawEnrollmentYear() {drawYearChart("0", 'Aloitusvuosi', 'chart_enrollmentYear')}
         
         
         function drawColumnChart(data, label, target) {
@@ -142,27 +141,35 @@
         }
         
         
-		function drawHistoChart(prop, label, target) {
+		function drawYearChart(prop, label, target) {
 			var data = new google.visualization.DataTable(),
-	
+	 
 				options = {
 				    title: label,
 				    legend: { position: 'none' },
 				    colors: ['green'],
-				    histogram: { bucketSize: 1.0, hideBucketItems: true, maxNumBuckets:150 },
+				    
 				    hAxis: {
 				    	slantedText:false, 
 				    	maxAlternation: 1, 
 				    	format: '' 
 				    	},
+				    vAxis: {
+				    	 maxValue: 4
+				    },
 			    	width: '95%', 
+			    	bar: {
+			    	      groupWidth: '88%'
+			    	    },
 			    	height:500
 				  },
 			
-				chart = new google.visualization.Histogram(document.getElementById(target));
-		  
-			data.addColumn('number');
-			data.addRows(countByYear(vm.years, prop));
+				chart = new google.visualization.ColumnChart(document.getElementById(target));
+			
+	        data.addColumn('string', 'Vuosi');
+	        data.addColumn('number', 'Oppilaita');
+			var arr=countByYear(vm.years,prop);
+			data.addRows(arr);
 		  
 			chart.draw(data, options);
 		}
@@ -243,18 +250,20 @@
 	        data.addColumn('string', prop);
 	        data.addColumn('number', 'Weight');
 	        data.addRows(arr2);
-
+	        
+	        	
 	        // Sets chart options.
 	        var options = {
 	        		title: 'Otsikko',
 	        		sankey: {
-	        	        node: 	{ 
-	        	        		label: { fontSize: 14,
-	        	                         color: '#000',
-	        	                         bold: true },
-	        	                labelPadding: 12
-	        	                }
-	        				},
+	        			node: 	{ 
+	        	        	label: { 
+	        	        		fontSize: 14,
+	        	                color: '#000',
+	        	                bold: true },
+	        	        labelPadding: 12
+	        	        }
+	        		},
 	        };
 
 	        // Instantiates and draws our chart, passing in some options.
@@ -270,15 +279,33 @@
     	}
 		
     	
-		function countByYear(data, prop) {
+		function countByYear(data, index) {
 			var res = [];
+			
 			$.each(data, function( i, value ) {
-				if (value.hasOwnProperty(prop)) {
-					res.push([parseInt(value[prop])]);
+				if (value.hasOwnProperty('index') && value['index']==index) {
+					res.push([ value['year'], parseInt(value['count']) ]);
 				}
 			});
+			res=fillEmptyYears(res);
 			return res ;
     	}
+		
+		function fillEmptyYears(data) {
+			var res=[], 
+				y=parseInt(data[0][0]);
+				
+			for (var i=0; i<data.length; i++) {
+				var y2=parseInt(data[i][0]);
+				while (y<y2) {
+					res.push([''+y, 0]);
+					y++;
+				}
+				res.push(data[i]);
+				y++;
+			}
+			return res;
+		}
 		
 		function countProperties(data, prop) {
 			var res = {};
