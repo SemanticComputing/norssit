@@ -74,12 +74,15 @@
         
         
         function drawColumnChart(data, label, target) {
+        	var res = {}, clusters=0;
         	
-        	var res = {};
         	$.each(data, function( i, value ) {
         		if (value.hasOwnProperty('label')) {
 					var y = value['label'];
-					if (!res.hasOwnProperty(y)) res[y]={};
+					if (!res.hasOwnProperty(y)) { 
+						res[y]={}; 
+						clusters++;
+					};
 					res[y][value['year']] = value['count'];
 				}
 			});
@@ -87,13 +90,16 @@
         	var data = new google.visualization.DataTable();
             data.addColumn('number', 'X');
             
-        	var rows = {}, 
-        		iter = 1;
+        	var rows = {},
+        		iter = 1,
+        		zeros=[];
+        	for (var i=0; i<clusters; i++) zeros.push(0);
+        	
         	$.each(res, function( key, values ) {
         		data.addColumn('number', key);
         		$.each(values, function( y, count ) {
         			var year = parseInt(y);
-            		if (!rows.hasOwnProperty(year)) rows[year] = [parseInt(year),0,0,0,0,0];
+            		if (!rows.hasOwnProperty(year)) rows[year] = [parseInt(year)].concat(zeros);
             		rows[year][iter] += parseInt(count);
     			});
         		iter++;
@@ -102,6 +108,7 @@
         	rows = $.map( rows, function( value, key ) {
 				return [ value ];
 			});
+        	
             data.addRows(rows);
             
             var options = {
