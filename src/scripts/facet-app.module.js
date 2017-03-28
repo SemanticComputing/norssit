@@ -46,6 +46,12 @@
             templateUrl: 'views/norssit.visu.html',
             controller: 'VisuController',
             controllerAs: 'vm'
+        })
+        .state('visu2', {
+            url: '/visualisointi2',
+            templateUrl: 'views/norssit.visu2.html',
+            controller: 'VisuController2',
+            controllerAs: 'vm'
         });
     });
 })();

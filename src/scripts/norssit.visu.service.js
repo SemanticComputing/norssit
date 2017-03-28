@@ -16,9 +16,11 @@
         // Return a promise.
         this.getResults = getResults;
         this.getResults1 = getResults1;
+        this.getResults2 = getResults2;
         this.getResultsYears = getResultsYears;
         this.getResultsTopTitles = getResultsTopTitles;
         this.getResultsTopOrgs = getResultsTopOrgs;
+        this.getResultsTopSchools = getResultsTopSchools;
         
         // Get the facets.
         // Return a promise (because of translation).
@@ -175,14 +177,21 @@
         // The query for the results.
         // ?id is bound to the norssit URI.
         var query = prefixes +
-        	'  SELECT distinct ?occupation ?education ?organization ?id ' +
+        	'  SELECT distinct ?occupation ?education ?organization ?eduorganization ?id ' +
             '  WHERE {' +
             '  	 { <RESULT_SET> } ' +
-            '  	 ?evt bioc:education_inheres_in|bioc:title_inheres_in ?id . ' +
-            '    OPTIONAL { ?evt bioc:title_inheres_in ?id ; a/skos:prefLabel ?occupation . }' +
-            '    OPTIONAL { ?evt bioc:education_inheres_in ?id ; a/skos:prefLabel ?education . }' +
-            '    OPTIONAL { ?evt bioc:relates_to/skos:prefLabel ?organization . }' +
-            '  } ';
+        	'  { ?evt bioc:education_inheres_in ?id ; a/skos:prefLabel ?education . ' +
+        	'    OPTIONAL { ?evt bioc:relates_to ?org .' +
+        	'	 	?org a schema:EducationalOrganization ; skos:prefLabel ?eduorganization }' +
+        	'  }' +
+        	'  UNION' +
+        	'  { ?evt bioc:title_inheres_in ?id ' +
+        	'     ; a ?cls .' +
+        	'    FILTER (?cls != bioc:Title)' +
+        	'    ?cls skos:prefLabel ?occupation .' +
+        	'    OPTIONAL { ?evt bioc:relates_to/skos:prefLabel ?organization }' +
+        	'  }' +
+        	'}';
             
        var queryYears = prefixes +
 		    'SELECT ?year ?index (count(distinct ?id) AS ?count)   ' +
@@ -191,7 +200,7 @@
 		   	'  VALUES (?prop ?index) {  ' +
 		   	'    (person_registry:enrollmentYear 0)  ' +
 		   	'    (person_registry:matriculationYear 1) } ' +
-		   	'  ?id ?prop ?year .   ' +
+		   	'  ?id ?prop ?year .   ' + 
 		   	'} GROUP BY ?year ?index ORDER BY ?year ';
        
         var queryTopTitles = prefixes + 
@@ -209,8 +218,9 @@
 	    	'    ?class skos:prefLabel ?label . ' +
 	    	'    ?evt a ?class ; ' +
 	    	'         bioc:title_inheres_in ?id ; ' +
-	    	'         schema:startDate ?year . ' +
+	    	'         schema:startDate ?date . ' +
 	    	'    { <RESULT_SET> } ' +
+	    	' 	 BIND (floor(year(?date)/10)*10 AS ?year)' +
 	    	'  } GROUP BY ?label ?year ORDER by ?year ';
         
         var queryTopOrgs = prefixes + 
@@ -219,19 +229,41 @@
 	    	'    { ' +
 	    	'    SELECT ?org (count (distinct ?id) AS ?no) ' +
 	    	'    WHERE { ' +
-	    	'      ?evt bioc:education_inheres_in|bioc:title_inheres_in ?id ; ' +
-	    	'           bioc:relates_to ?org . ' +
-	    	'        { <RESULT_SET> } ' +
+	    	'  	   ?evt bioc:title_inheres_in ?id ; ' +
+            '      		bioc:relates_to ?org . ' +
+            '		?org a foaf:Organization . ' +
+	    	'      { <RESULT_SET> } ' +
 	    	'    } GROUP BY ?org ORDER BY desc(?no) LIMIT 5 ' +
 	    	'    } ' +
 	    	'    ?org skos:prefLabel ?label . ' +
-	    	'    ?evt a ?class ; ' +
-	    	'         bioc:education_inheres_in|bioc:title_inheres_in ?id ; ' +
-	    	'           bioc:relates_to ?org; ' +
-	    	'         schema:startDate ?year . ' +
+	    	'    ?evt bioc:title_inheres_in ?id ; ' +
+	    	'    	  bioc:relates_to ?org; ' +
+	    	'         schema:startDate ?date . ' +
 	    	'    { <RESULT_SET> } ' +
+	    	' 	 BIND (floor(year(?date)/10)*10 AS ?year)' +
 	    	'  } GROUP BY ?label ?year ORDER by ?year ';
 	    
+        var queryTopSchools = prefixes + 
+        '  SELECT ?label ?year (count (distinct ?id) AS ?count)  ' +
+    	'  WHERE { ' +
+    	'    { ' +
+    	'    SELECT ?org (count (distinct ?id) AS ?no) ' +
+    	'    WHERE { ' +
+    	'  	   ?evt bioc:education_inheres_in ?id ; ' +
+        '      		bioc:relates_to ?org . ' +
+        ' 	   ?org a schema:EducationalOrganization ' +	
+    	'      { <RESULT_SET> } ' +
+    	'    } GROUP BY ?org ORDER BY desc(?no) LIMIT 5 ' +
+    	'    } ' +
+    	'    ?org skos:prefLabel ?label .' +
+    	'    ?evt bioc:education_inheres_in ?id ; ' +
+    	'    	  bioc:relates_to ?org; ' +
+    	'         schema:startDate ?date . ' +
+    	'    { <RESULT_SET> } ' +
+    	' 	 BIND (floor(year(?date)/10)*10 AS ?year)' +
+    	'  } GROUP BY ?label ?year ORDER by ?year ';
+    
+        
         // The SPARQL endpoint URL
         var endpointUrl = 'https://ldf.fi/norssit/sparql';
 
@@ -244,7 +276,8 @@
         var endpoint = new AdvancedSparqlService(endpointUrl, objectMapperService);
         
         function getResults1(facetSelections) {
-        	return endpoint.getObjectsNoGrouping(query.replace("<RESULT_SET>", facetSelections.constraint.join(' ')));
+        	var q = query.replace("<RESULT_SET>", facetSelections.constraint.join(' '));
+        	return endpoint.getObjectsNoGrouping(q);
         }
         
         function getResultsYears(facetSelections) {
@@ -261,12 +294,26 @@
         	return endpoint.getObjectsNoGrouping(queryTopOrgs.replace(/<RESULT_SET>/g, facetSelections.constraint.join(' ')));
         }
         
+        function getResultsTopSchools(facetSelections) {
+        	// console.log(queryTopSchools.replace(/<RESULT_SET>/g, facetSelections.constraint.join(' ')));
+        	return endpoint.getObjectsNoGrouping(queryTopSchools.replace(/<RESULT_SET>/g, facetSelections.constraint.join(' ')));
+        }
+        
+        
         function getResults(facetSelections) {
         	var promises = [
             	this.getResults1(facetSelections),
             	this.getResultsYears(facetSelections),
             	this.getResultsTopTitles(facetSelections),
-            	this.getResultsTopOrgs(facetSelections)
+            	this.getResultsTopOrgs(facetSelections),
+            	this.getResultsTopSchools(facetSelections)
+            ];
+        	return $q.all(promises);
+        }
+        
+        function getResults2(facetSelections) {
+        	var promises = [
+            	this.getResults1(facetSelections)
             ];
         	return $q.all(promises);
         }
