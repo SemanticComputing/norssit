@@ -87,6 +87,11 @@
 				}
 			});
         	
+            if (res==={} || clusters==0) { 
+            	data = [];
+            	for (var i= 1890; i<2000; i+=10) data.push({count:"0", label:"No results", year:""+i});
+            	return drawColumnChart(data, label, target);
+            	}
         	var data = new google.visualization.DataTable();
             data.addColumn('string', 'X');
             
@@ -94,6 +99,7 @@
         		iter = 1,
         		zeros=[];
         	for (var i=0; i<clusters; i++) zeros.push(0);
+        	
         	
         	$.each(res, function( key, values ) {
         		data.addColumn('number', key);
@@ -156,9 +162,14 @@
 			
 				chart = new google.visualization.ColumnChart(document.getElementById(target));
 			
-	        data.addColumn('number', 'Vuosi');
+	        data.addColumn('string', 'Vuosi');
 	        data.addColumn('number', 'Oppilaita');
-			var arr=countByYear(vm.years,prop);
+	        
+			var arr = $.map( countByYear(vm.years,prop), 
+					function( value, key ) {
+						return [[ ''+value[0],value[1] ]];
+					});
+			
 			data.addRows(arr);
 			chart.draw(data, options);
 		}
@@ -192,6 +203,7 @@
 				y=parseInt(res[res.length-1][0])+1;
 				res.push([y,0]);
 			}
+			
 			return res ;
     	}
 		
