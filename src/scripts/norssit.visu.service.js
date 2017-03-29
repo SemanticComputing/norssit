@@ -177,7 +177,7 @@
         // The query for the results.
         // ?id is bound to the norssit URI.
         var query = prefixes +
-        	'  SELECT distinct ?occupation ?education ?organization ?eduorganization ?id ' +
+        	' SELECT distinct ?occupation ?education ?organization ?eduorganization ?id ' +
             '  WHERE {' +
             '  	 { <RESULT_SET> } ' +
         	'  { ?evt bioc:education_inheres_in ?id ; a/skos:prefLabel ?education . ' +
@@ -194,8 +194,8 @@
         	'}';
             
        var queryYears = prefixes +
-		    'SELECT ?year ?index (count(distinct ?id) AS ?count)   ' +
-		   	'WHERE { ' +
+		    ' SELECT ?year ?index (count(distinct ?id) AS ?count) ' +
+		   	' WHERE { ' +
 		   	'  { <RESULT_SET> } ' +
 		   	'  VALUES (?prop ?index) {  ' +
 		   	'    (person_registry:enrollmentYear 0)  ' +
@@ -204,8 +204,8 @@
 		   	'} GROUP BY ?year ?index ORDER BY ?year ';
        
         var queryTopTitles = prefixes + 
-	    	'  SELECT ?label ?year (count (distinct ?id) AS ?count)  ' +
-	    	'  WHERE { ' +
+	    	' SELECT ?label ?year (count (distinct ?id) AS ?count) ' +
+	    	' WHERE { ' +
 	    	'    { ' +
 	    	'    SELECT ?class (count (distinct ?id) AS ?no) ' +
 	    	'    WHERE { ' +
@@ -224,7 +224,7 @@
 	    	'  } GROUP BY ?label ?year ORDER by ?year ';
         
         var queryTopOrgs = prefixes + 
-	        '  SELECT ?label ?year (count (distinct ?id) AS ?count)  ' +
+	        'SELECT ?label ?year (count (distinct ?id) AS ?count) ' +
 	    	'  WHERE { ' +
 	    	'    { ' +
 	    	'    SELECT ?org (count (distinct ?id) AS ?no) ' +
@@ -244,24 +244,24 @@
 	    	'  } GROUP BY ?label ?year ORDER by ?year ';
 	    
         var queryTopSchools = prefixes + 
-        '  SELECT ?label ?year (count (distinct ?id) AS ?count)  ' +
-    	'  WHERE { ' +
-    	'    { ' +
-    	'    SELECT ?org (count (distinct ?id) AS ?no) ' +
-    	'    WHERE { ' +
-    	'  	   ?evt bioc:education_inheres_in ?id ; ' +
-        '      		bioc:relates_to ?org . ' +
-        ' 	   ?org a schema:EducationalOrganization ' +	
-    	'      { <RESULT_SET> } ' +
-    	'    } GROUP BY ?org ORDER BY desc(?no) LIMIT 5 ' +
-    	'    } ' +
-    	'    ?org skos:prefLabel ?label .' +
-    	'    ?evt bioc:education_inheres_in ?id ; ' +
-    	'    	  bioc:relates_to ?org; ' +
-    	'         schema:startDate ?date . ' +
-    	'    { <RESULT_SET> } ' +
-    	' 	 BIND (floor(year(?date)/10)*10 AS ?year)' +
-    	'  } GROUP BY ?label ?year ORDER by ?year ';
+	        ' SELECT ?label ?year (count (distinct ?id) AS ?count) ' +
+	    	' WHERE { ' +
+	    	'    { ' +
+	    	'    SELECT ?org (count (distinct ?id) AS ?no) ' +
+	    	'    WHERE { ' +
+	    	'  	   ?evt bioc:education_inheres_in ?id ; ' +
+	        '      		bioc:relates_to ?org . ' +
+	        ' 	   ?org a schema:EducationalOrganization ' +	
+	    	'      { <RESULT_SET> } ' +
+	    	'    } GROUP BY ?org ORDER BY desc(?no) LIMIT 5 ' +
+	    	'    } ' +
+	    	'    ?org skos:prefLabel ?label .' +
+	    	'    ?evt bioc:education_inheres_in ?id ; ' +
+	    	'    	  bioc:relates_to ?org; ' +
+	    	'         schema:startDate ?date . ' +
+	    	'    { <RESULT_SET> } ' +
+	    	' 	 BIND (floor(year(?date)/10)*10 AS ?year)' +
+	    	' } GROUP BY ?label ?year ORDER by ?year ';
     
         
         // The SPARQL endpoint URL

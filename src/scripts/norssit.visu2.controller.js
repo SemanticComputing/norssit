@@ -78,17 +78,17 @@
         	
         	$.each(data, function( i, value ) {
         		if (value.hasOwnProperty('label')) {
-					var y = value['label'];
+					var y = (value['label']);
 					if (!res.hasOwnProperty(y)) { 
 						res[y]={}; 
 						clusters++;
 					};
-					res[y][value['year']] = value['count'];
+					res[y][parseInt(value['year'])] = parseInt(value['count']);
 				}
 			});
         	
         	var data = new google.visualization.DataTable();
-            data.addColumn('number', 'X');
+            data.addColumn('string', 'X');
             
         	var rows = {},
         		iter = 1,
@@ -98,8 +98,8 @@
         	$.each(res, function( key, values ) {
         		data.addColumn('number', key);
         		$.each(values, function( y, count ) {
-        			var year = parseInt(y);
-            		if (!rows.hasOwnProperty(year)) rows[year] = [parseInt(year)].concat(zeros);
+        			var year = (y);
+            		if (!rows.hasOwnProperty(year)) rows[year] = [year].concat(zeros);
             		rows[year][iter] += parseInt(count);
     			});
         		iter++;
@@ -108,13 +108,16 @@
         	rows = $.map( rows, function( value, key ) {
 				return [ value ];
 			});
+        	var hticks = $.map( rows, function( value, key ) { return [ value[0] ]; });
         	
-            data.addRows(rows);
+        	data.addRows(rows);
             
             var options = {
             		title: label,
             		hAxis: {
-            			title: 'Vuosikymmen'
+            			title: 'Vuosikymmen',
+            			ticks: hticks,
+            			gridlines: { color: 'none' }
             		},
             		vAxis: {
             			title: 'Henkilöä'
@@ -132,12 +135,14 @@
 				options = {
 				    title: label,
 				    legend: { position: 'none' },
+				    
+            		tooltip: {format: 'none'},
 				    colors: ['green'],
 				    
 				    hAxis: {
 				    	slantedText:false, 
 				    	maxAlternation: 1, 
-				    	format: '' 
+				    	format: ''
 				    	},
 				    vAxis: {
 				    	 maxValue: 4
@@ -151,11 +156,10 @@
 			
 				chart = new google.visualization.ColumnChart(document.getElementById(target));
 			
-	        data.addColumn('string', 'Vuosi');
+	        data.addColumn('number', 'Vuosi');
 	        data.addColumn('number', 'Oppilaita');
 			var arr=countByYear(vm.years,prop);
 			data.addRows(arr);
-		  
 			chart.draw(data, options);
 		}
     
@@ -172,10 +176,22 @@
 			
 			$.each(data, function( i, value ) {
 				if (value.hasOwnProperty('index') && value['index']==index) {
-					res.push([ value['year'], parseInt(value['count']) ]);
+					res.push([ parseInt(value['year']), parseInt(value['count']) ]);
 				}
 			});
+			//	fill missing years with zero value
 			res=fillEmptyYears(res);
+			
+			//	padding if only one result:
+			if (res.length<2) {
+				// add year before with zero result
+				var y=parseInt(res[0][0])-1;
+				res = [[y,0]].concat(res);
+				
+				// ... and after
+				y=parseInt(res[res.length-1][0])+1;
+				res.push([y,0]);
+			}
 			return res ;
     	}
 		
@@ -187,7 +203,7 @@
 			for (var i=0; i<data.length; i++) {
 				var y2=parseInt(data[i][0]);
 				while (y<y2) {
-					res.push([''+y, 0]);
+					res.push([y, 0]);
 					y++;
 				}
 				res.push(data[i]);
