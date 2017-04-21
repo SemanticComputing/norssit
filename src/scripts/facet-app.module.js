@@ -19,6 +19,8 @@
     .constant('RESULTS_PER_PAGE', 25)
     .constant('PAGES_PER_QUERY', 1)
 
+    .value('SPARQL_ENDPOINT_URL', 'https://ldf.fi/norssit/sparql')
+
     .config(function($urlMatcherFactoryProvider) {
         $urlMatcherFactoryProvider.strictMode(false);
     })

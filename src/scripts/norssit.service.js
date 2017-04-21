@@ -8,7 +8,7 @@
     .service('norssitService', norssitService);
 
     /* @ngInject */
-    function norssitService($q, $location, _, FacetResultHandler) {
+    function norssitService($q, $location, _, FacetResultHandler, SPARQL_ENDPOINT_URL) {
 
         /* Public API */
 
@@ -228,7 +228,7 @@
         ' }';
 
         // The SPARQL endpoint URL
-        var endpointUrl = 'https://ldf.fi/norssit/sparql';
+        var endpointUrl = SPARQL_ENDPOINT_URL;
 
         var facetOptions = {
             endpointUrl: endpointUrl,
