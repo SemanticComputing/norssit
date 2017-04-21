@@ -78,7 +78,6 @@ module.exports = function (grunt) {
                     open: true,
                     middleware: function (connect) {
                         return [
-                            modRewrite(['!\\.html|\\.js|\\.css|\\.png|\\.jpg|\\.gif|\\.svg|\\woff|\\woff2$ /index.html [L]']),
                             connect.static('.tmp'),
                             connect().use(
                                 '/bower_components',
@@ -398,7 +397,8 @@ module.exports = function (grunt) {
                         '*.{ico,png,txt}',
                         '.htaccess',
                         '*.html',
-                        'images/{,*/}*.{webp}'
+                        'images/{,*/}*.{webp}',
+                        'pdf/{,*/}*'
                     ]
                 }, {
                     expand: true,
