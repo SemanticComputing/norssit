@@ -61,10 +61,10 @@
             vm.previousSelections = _.clone(facetSelections.constraint);
             facetUrlStateHandlerService.updateUrlParams(facetSelections);
             return fetchResults(facetSelections).then(function (people) {
-            	google.charts.setOnLoadCallback(function () { drawPieChart('occupation', 'Arvo tai ammatti', 'chart_occupation'); });
-            	google.charts.setOnLoadCallback(function () { drawPieChart('organization', 'Työnantaja tai järjestö', 'chart_organization'); });
-            	google.charts.setOnLoadCallback(function () { drawPieChart('eduorganization', 'Oppilaitos', 'chart_eduorganization'); });
-            	google.charts.setOnLoadCallback(function () { drawPieChart('education', 'Koulutus', 'chart_education'); });
+            	google.charts.setOnLoadCallback(function () { drawPieChart('occupation', 'Myöhempi arvo tai ammatti', 'chart_occupation'); });
+            	google.charts.setOnLoadCallback(function () { drawPieChart('organization', 'Työnantajat tai jäsenyydet järjestöissä', 'chart_organization'); });
+            	google.charts.setOnLoadCallback(function () { drawPieChart('eduorganization', 'Opiskelupaikkoja Norssin jälkeen', 'chart_eduorganization'); });
+            	google.charts.setOnLoadCallback(function () { drawPieChart('education', 'Koulutus Norssin jälkeen', 'chart_education'); });
             	google.charts.setOnLoadCallback(drawSankeyChart);
             	return;
 	         });

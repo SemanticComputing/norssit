@@ -25,8 +25,7 @@
         vm.topTitles = [];
         vm.topOrgs = [];
 		vm.removeFacetSelections = removeFacetSelections;
-		// vm.colors = [ '#B2AFAC', '#2A2820', '#E9E6D9', '#2D8815', '#CFB1A3', '#B36C4A', '#D79060', '#A65F35', '#577889', '#D3D4CE', '#333946', '#B3C8C5', '#92908D', '#C86D37', '#C8724C', '#3B654F', '#3B88A0', '#543024', '#AF9136', '#5E5924', '#D7CBB4', '#9C8E6E', '#5E635C', '#688B42', '#728E91', '#DFE1DB', '#028307', '#1F6A13', '#A69F97', '#8F7C83', '#946F61', '#EDEEEA' ];
-        
+		
 		google.charts.load('current', {packages: ['corechart', 'line']});
 
         var initListener = $scope.$on('sf-initial-constraints', function(event, config) {
@@ -62,11 +61,11 @@
             facetUrlStateHandlerService.updateUrlParams(facetSelections);
             return fetchResults(facetSelections).then(function (people) {
             	google.charts.setOnLoadCallback(function () { drawYearChart("0", 'Aloitusvuosi Norssissa', 'chart_enrollmentYear')});
-            	google.charts.setOnLoadCallback(function () { drawYearChart("1", 'Valmistumisvuosi', 'chart_matriculationYear') });
+            	google.charts.setOnLoadCallback(function () { drawYearChart("1", 'Valmistumisvuosi Norssista', 'chart_matriculationYear') });
             	
-            	google.charts.setOnLoadCallback(function () { drawColumnChart(vm.topSchools, 'Yleisimpiä oppilaitoksia vuosikymmenittäin', 'chart_topschools') });
-            	google.charts.setOnLoadCallback(function () { drawColumnChart(vm.topTitles, 'Yleisimpiä virkoja vuosikymmenittäin', 'chart_topeducation') });
-            	google.charts.setOnLoadCallback(function () { drawColumnChart(vm.topOrgs, 'Yleisimpiä työnantajia vuosikymmenittäin', 'chart_toporganization') });
+            	google.charts.setOnLoadCallback(function () { drawColumnChart(vm.topSchools, 'Yleisimmät oppilaitokset vuosikymmenittäin', 'chart_topschools') });
+            	google.charts.setOnLoadCallback(function () { drawColumnChart(vm.topTitles, 'Yleisimmät virat ja toimet vuosikymmenittäin', 'chart_topeducation') });
+            	google.charts.setOnLoadCallback(function () { drawColumnChart(vm.topOrgs, 'Yleisimmät työnantajat vuosikymmenittäin', 'chart_toporganization') });
             	
             	return;
 	         });
@@ -92,6 +91,7 @@
             	for (var i= 1890; i<2000; i+=10) data.push({count:"0", label:"No results", year:""+i});
             	return drawColumnChart(data, label, target);
             	}
+            
         	var data = new google.visualization.DataTable();
             data.addColumn('string', 'X');
             
@@ -214,6 +214,7 @@
 				
 			for (var i=0; i<data.length; i++) {
 				var y2=parseInt(data[i][0]);
+				//	fill missing years in the sequence with zero values:
 				while (y<y2) {
 					res.push([y, 0]);
 					y++;
@@ -260,7 +261,7 @@
             	if (latestUpdate !== updateId) {
                     return;
                 }
-               
+            	
                 vm.isLoadingResults = false;
                 vm.people = res[0];
                 vm.years = res[1];
