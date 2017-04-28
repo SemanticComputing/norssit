@@ -32,14 +32,14 @@
     .config(function($stateProvider) {
         $stateProvider
         .state('table', {
-            url: '/taulukko',
+            url: '/lista',
             templateUrl: 'views/norssit.table.html',
             controller: 'TableController',
             controllerAs: 'vm'
         })
-        .state('list', {
-            url: '/lista',
-            templateUrl: 'views/norssit.list.html',
+        .state('cards', {
+            url: '/ruudukko',
+            templateUrl: 'views/norssit.cards.html',
             controller: 'CardsController',
             controllerAs: 'vm'
         })
