@@ -102,6 +102,7 @@ a.no-style {
 
 .person-profile-img img {
   height: 250px;
+  max-height: 250px;
 }
 
 .vertical-center {
