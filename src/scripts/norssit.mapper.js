@@ -24,6 +24,7 @@
         function postProcess(objects) {
             objects.forEach(function(person) {
                 person.hasAchievements = person.hasAchievements === 'true' ? true : false;
+                person.hasImage = !!person.images;
                 person.images = person.images ? _.castArray(person.images) : ['images/person_placeholder.svg'];
             });
             return objects;

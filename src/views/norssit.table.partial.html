@@ -24,7 +24,7 @@
           <a title="Data" class="" ng-href="{{ ::person.id }}"><span class="glyphicon glyphicon-hdd" aria-hidden="true"></span></a>
         </span>
       </div>
-      <div ng-if=::"person.images" class="name-col col-md-12 col-lg-5">
+      <div ng-if="::person.hasImage" class="name-col col-md-12 col-lg-5">
         <div ng-repeat="img in ::person.images"
           ng-class="{ 'col-md-12': ($first && $last), 'col-sm-6': !($first && $last) }" class="person-img-col vcenter">
           <img uib-popover-template="'views/profile-image-popover.html'"
