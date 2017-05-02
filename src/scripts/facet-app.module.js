@@ -49,13 +49,16 @@
             controller: 'CardsController',
             controllerAs: 'vm'
         })
-        .state('visu', {
+        .state('visualizations', {
+            abstract: true
+        })
+        .state('visualizations.visu', {
             url: '/visualisointi',
             templateUrl: 'views/norssit.visu.html',
             controller: 'VisuController',
             controllerAs: 'vm'
         })
-        .state('visu2', {
+        .state('visualizations.visu2', {
             url: '/visualisointi2',
             templateUrl: 'views/norssit.visu2.html',
             controller: 'VisuController2',
