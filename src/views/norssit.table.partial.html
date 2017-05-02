@@ -62,7 +62,7 @@
       <div ng-if="::person.relative">
       	<span>Sukulaiset: </span><br>
       	<span ng-repeat="relative in person.relative | castArray">
-      		{{ ::relative.type }}<a ng-href="{{ ::relative.id }}"> {{ ::relative.name }}</a><br>
+          {{ ::relative.type }} <a ui-sref="detail({ personId: relative.id })">{{ ::relative.name }}</a>
       	</span>
       </div>
       <button class="page-btn visible-xs-block visible-sm-block btn btn-default" ng-click="::vm.openPage(person)">Matrikkelisivu</button>
