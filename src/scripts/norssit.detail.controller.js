@@ -16,10 +16,16 @@
 
         vm.openPage = openPage;
 
-        norssitService.getPerson($stateParams.personId).then(function(person) {
-            person.image = person.image ? _.castArray(person.image) : ['images/person_placeholder.svg'];
-            vm.person = person;
-        });
+        init();
+
+        function init() {
+            norssitService.getPerson($stateParams.personId).then(function(person) {
+                vm.person = person;
+                return person;
+            }).then(function(person) {
+                return norssitService.getAchievements(person);
+            }).catch(handleError);
+        }
 
         function openPage() {
             $uibModal.open({

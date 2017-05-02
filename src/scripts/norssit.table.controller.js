@@ -22,7 +22,6 @@
         var vm = this;
 
         vm.openPage = openPage;
-        vm.toArray = toArray;
         vm.removeFacetSelections = removeFacetSelections;
         vm.sortBy = sortBy;
         vm.getSortClass = norssitService.getSortClass;
@@ -39,10 +38,6 @@
             vm.facetOptions.scope = $scope;
             vm.handler = new FacetHandler(vm.facetOptions);
         });
-
-        function toArray(value) {
-            return _.castArray(value);
-        }
 
         function removeFacetSelections() {
             $state.reload();

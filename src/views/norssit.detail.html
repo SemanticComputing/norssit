@@ -1,12 +1,18 @@
 <div class="container-fluid">
   <div class="row">
+    <div class="col-sm-12" ng-show="!vm.person && !vm.error">
+      <img class="loading-img" src="images/loading-lg.gif"></img>
+    </div>
+    <div uib-alert ng-if="vm.error">
+      {{ vm.error }}
+    </div>
     <div class="col-sm-12 col-md-8 text-center" ng-show="vm.person">
       <h1>{{ vm.person.registerNumber }}. {{ vm.person.givenName }} {{ vm.person.familyName }}</h1>
       <div class="thumbnail">
         <div class="person-profile-img">
           <div class="row">
             <div class="col-sm-12 text-center">
-              <img ng-repeat="img in vm.person.image" class="person-img img img-responsive" ng-src="{{ img }}" />
+              <img ng-repeat="img in vm.person.images" class="person-img img img-responsive" ng-src="{{ img }}" />
             </div>
           </div>
         </div>
@@ -24,7 +30,7 @@
                 <p>Norssi {{ vm.person.enrollmentYear || '?' }} &ndash; {{ vm.person.matriculationYear || '?' }}</p>
               </div>
               <div ng-if="vm.person.occupation" class="col-xs-12">
-                <p>{{ vm.toArray(vm.person.occupation) | join:', ' }}</p>
+                <p>{{ vm.person.occupation | castArray | join:', ' }}</p>
               </div>
               <div class="col-xs-12 icon-menu">
                 <a title="Avaa matrikkelisivu" href="" ng-click="vm.openPage(vm.person)"><span class="glyphicon glyphicon-book" aria-hidden="true"></span></a>
@@ -82,9 +88,10 @@
         </div>
       </div>
     </div>
-    <div class="col-md-4 text-left" ng-if="vm.person.achievement">
+    <div class="col-md-4 text-left" ng-if="vm.person.hasAchievements">
       <h3>Saavutuksia</h3>
-      <div class="col-sm-6" ng-repeat="achievement in vm.person.achievement | castArray"><a ng-href="{{ achievement.wikipedia }}">{{ achievement.label | castArray | first }}</a></div>
+      <img ng-if="!vm.person.achievements" class="loading-img" src="images/loading-lg.gif"></img>
+      <div class="col-sm-6" ng-repeat="achievement in vm.person.achievements"><a ng-href="{{ achievement.wikipedia }}">{{ achievement.label | castArray | first }}</a></div>
     </div>
   </div>
 </div>

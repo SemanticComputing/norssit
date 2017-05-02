@@ -9,7 +9,7 @@
 
     /* @ngInject */
     function norssitService($q, $location, _, FacetResultHandler, SPARQL_ENDPOINT_URL,
-            AdvancedSparqlService) {
+            AdvancedSparqlService, personMapperService) {
 
         /* Public API */
 
@@ -194,7 +194,7 @@
         '   ?id schema:hobby ?hobby_id . ' +
         '   BIND(REPLACE(STR(?hobby_id), "http://ldf.fi/hobbies/", "") AS ?hobby) ' +
         '  }' +
-        '  OPTIONAL { ?id schema:image ?image . }' +
+        '  OPTIONAL { ?id schema:image ?images . }' +
         '  OPTIONAL { ?id dct:description ?description . }' +
         '  OPTIONAL { ?id person_registry:pageNumber ?pageNumber . }' +
         '  OPTIONAL { ?id person_registry:pageImageURL ?pageImageURL . }' +
@@ -224,22 +224,19 @@
         '    	?relative__id schema:familyName ?relative__familyName ; schema:givenName ?relative__givenName .' +
         '		BIND (replace(concat(?relative__givenName," ",?relative__familyName),"[(][^)]+[)]\s*","") AS ?relative__name) ' +
         '  }' +
-        '  OPTIONAL { ' +
-        '   FILTER EXISTS { ' +
-        '    ?ach rdfs:subPropertyOf* nach:involved_in .' +
-        '    ?id ?ach ?achievement__id . ' +
-        '   }' +
-        '   BIND(1 AS ?achievement__id) . ' +
-        '  }' +
+        '  BIND(EXISTS { ' +
+        '   ?ach rdfs:subPropertyOf* nach:involved_in . ' +
+        '   ?id ?ach ?achievement__id . ' +
+        '  } AS ?hasAchievements) ' +
         ' }';
 
         var achievementQuery = prefixes +
-        ' SELECT DISTINCT * { ' +
-        '  VALUES ?id { <ID> } ' +
+        ' SELECT DISTINCT ?id ?label ?wikipedia { ' +
+        '  VALUES ?person { <ID> } ' +
         '  ?ach rdfs:subPropertyOf* nach:involved_in .' +
-        '  ?id ?ach ?achievement__id . ' +
-        '  ?achievement__id skos:prefLabel ?achievement__label .' +
-        '  ?achievement__id norssit:wikipedia|norssit:www ?achievement__wikipedia .' +
+        '  ?person ?ach ?id . ' +
+        '  ?id skos:prefLabel ?label .' +
+        '  ?id norssit:wikipedia|norssit:www ?wikipedia .' +
         ' } ';
 
         // The SPARQL endpoint URL
@@ -256,6 +253,7 @@
         };
 
         var resultOptions = {
+            mapper: personMapperService,
             queryTemplate: query,
             prefixes: prefixes,
             paging: true,
@@ -267,7 +265,7 @@
         var resultHandler = new FacetResultHandler(endpointConfig, resultOptions);
 
         // This handler is for the additional queries.
-        var endpoint = new AdvancedSparqlService(endpointConfig);
+        var endpoint = new AdvancedSparqlService(endpointConfig, personMapperService);
 
         function getResults(facetSelections) {
             return resultHandler.getResults(facetSelections, getSortBy());
@@ -282,17 +280,18 @@
                     return person[0];
                 }
                 return $q.reject('Not found');
-            }).then(function(person) {
-                return getAchievements(person.id).then(function(achievements) {
-                    person.achievements = achievements;
-                    return person;
-                });
             });
         }
 
-        function getAchievements(id) {
-            var qry = achievementQuery.replace('<ID>', '<' + id + '>');
-            return endpoint.getObjects(qry);
+        function getAchievements(person) {
+            if (!person.hasAchievements || person.achievements) {
+                return person;
+            }
+            var qry = achievementQuery.replace('<ID>', '<' + person.id + '>');
+            return endpoint.getObjects(qry).then(function(achievements) {
+                person.achievements = achievements;
+                return person;
+            });
         }
 
         function getFacets() {
