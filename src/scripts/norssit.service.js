@@ -8,7 +8,8 @@
     .service('norssitService', norssitService);
 
     /* @ngInject */
-    function norssitService($q, $location, _, FacetResultHandler, SPARQL_ENDPOINT_URL) {
+    function norssitService($q, $location, _, FacetResultHandler, SPARQL_ENDPOINT_URL,
+            AdvancedSparqlService) {
 
         /* Public API */
 
@@ -25,6 +26,10 @@
         this.updateSortBy = updateSortBy;
         // Get the CSS class for the sort icon.
         this.getSortClass = getSortClass;
+        // Get the details of a single person.
+        this.getPerson = getPerson;
+        // Get the achievements of a person.
+        this.getAchievements = getAchievements;
 
         /* Implementation */
 
@@ -220,18 +225,31 @@
         '		BIND (replace(concat(?relative__givenName," ",?relative__familyName),"[(][^)]+[)]\s*","") AS ?relative__name) ' +
         '  }' +
         '  OPTIONAL { ' +
+        '   FILTER EXISTS { ' +
         '    ?ach rdfs:subPropertyOf* nach:involved_in .' +
         '    ?id ?ach ?achievement__id . ' +
-        '    ?achievement__id skos:prefLabel ?achievement__label .' +
-        '    ?achievement__id norssit:wikipedia|norssit:www ?achievement__wikipedia .' +
+        '   }' +
+        '   BIND(1 AS ?achievement__id) . ' +
         '  }' +
         ' }';
 
+        var achievementQuery = prefixes +
+        ' SELECT DISTINCT * { ' +
+        '  VALUES ?id { <ID> } ' +
+        '  ?ach rdfs:subPropertyOf* nach:involved_in .' +
+        '  ?id ?ach ?achievement__id . ' +
+        '  ?achievement__id skos:prefLabel ?achievement__label .' +
+        '  ?achievement__id norssit:wikipedia|norssit:www ?achievement__wikipedia .' +
+        ' } ';
+
         // The SPARQL endpoint URL
-        var endpointUrl = SPARQL_ENDPOINT_URL;
+        var endpointConfig = {
+            'endpointUrl': SPARQL_ENDPOINT_URL,
+            'usePost': true
+        };
 
         var facetOptions = {
-            endpointUrl: endpointUrl,
+            endpointUrl: endpointConfig.endpointUrl,
             rdfClass: '<http://xmlns.com/foaf/0.1/Person>',
             constraint: '?id <http://ldf.fi/norssit/ordinal> ?ordinal . ?id <http://schema.org/familyName> ?familyName .',
             preferredLang : 'fi'
@@ -240,15 +258,41 @@
         var resultOptions = {
             queryTemplate: query,
             prefixes: prefixes,
+            paging: true,
             pagesPerQuery: 2 // get two pages of results per query
         };
 
         // The FacetResultHandler handles forming the final queries for results,
         // querying the endpoint, and mapping the results to objects.
-        var resultHandler = new FacetResultHandler(endpointUrl, resultOptions);
+        var resultHandler = new FacetResultHandler(endpointConfig, resultOptions);
+
+        // This handler is for the additional queries.
+        var endpoint = new AdvancedSparqlService(endpointConfig);
 
         function getResults(facetSelections) {
             return resultHandler.getResults(facetSelections, getSortBy());
+        }
+
+        function getPerson(id) {
+            var qry = prefixes + query;
+            var constraint = 'VALUES ?id { <' + id + '> } ';
+            return endpoint.getObjects(qry.replace('<RESULT_SET>', constraint))
+            .then(function(person) {
+                if (person.length) {
+                    return person[0];
+                }
+                return $q.reject('Not found');
+            }).then(function(person) {
+                return getAchievements(person.id).then(function(achievements) {
+                    person.achievements = achievements;
+                    return person;
+                });
+            });
+        }
+
+        function getAchievements(id) {
+            var qry = achievementQuery.replace('<ID>', '<' + id + '>');
+            return endpoint.getObjects(qry);
         }
 
         function getFacets() {

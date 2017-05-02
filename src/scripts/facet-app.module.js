@@ -26,11 +26,17 @@
     })
 
     .config(function($urlRouterProvider){
-        $urlRouterProvider.otherwise('/lista');
+        $urlRouterProvider.otherwise('/ruudukko');
     })
 
     .config(function($stateProvider) {
         $stateProvider
+        .state('detail', {
+            url: '/tiedot/:personId',
+            templateUrl: 'views/norssit.detail.html',
+            controller: 'DetailController',
+            controllerAs: 'vm'
+        })
         .state('table', {
             url: '/lista',
             templateUrl: 'views/norssit.table.html',
