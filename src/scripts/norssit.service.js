@@ -191,8 +191,7 @@
         '  OPTIONAL { ?id schema:birthDate ?birthDate . }' +
         '  OPTIONAL { ?id schema:deathDate ?deathDate . }' +
         '  OPTIONAL { ' +
-        '   ?id schema:hobby ?hobby_id . ' +
-        '   BIND(REPLACE(STR(?hobby_id), "http://ldf.fi/hobbies/", "") AS ?hobby) ' +
+        '   ?id schema:hobby/skos:prefLabel ?hobby . ' +
         '  }' +
         '  OPTIONAL { ?id schema:image ?images . }' +
         '  OPTIONAL { ?id dct:description ?description . }' +
