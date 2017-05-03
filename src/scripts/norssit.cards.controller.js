@@ -25,12 +25,12 @@
         var maxPage;
 
         vm.openPage = openPage;
-        vm.toArray = toArray;
         vm.nextPage = nextPage;
         vm.isScrollDisabled = isScrollDisabled;
         vm.removeFacetSelections = removeFacetSelections;
         vm.sortBy = sortBy;
         vm.getSortClass = norssitService.getSortClass;
+        vm.getAchievements = getAchievements;
 
         vm.people = [];
 
@@ -47,10 +47,6 @@
             vm.handler = new FacetHandler(vm.facetOptions);
         });
 
-        function toArray(value) {
-            return _.castArray(value);
-        }
-
         function removeFacetSelections() {
             $state.reload();
         }
@@ -63,6 +59,10 @@
                     person: function() { return person; }
                 }
             });
+        }
+
+        function getAchievements(person) {
+            return norssitService.getAchievements(person);
         }
 
         function getFacetOptions() {

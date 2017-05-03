@@ -6,7 +6,7 @@
     .directive('wsNavbar', wsNavbarDirective);
 
     /* @ngInject */
-    function wsNavbarDirective($templateRequest, $compile, $uibModal) {
+    function wsNavbarDirective($location, $templateRequest, $compile, $uibModal) {
         return {
             link: link,
             controller: NavbarController,
@@ -14,7 +14,13 @@
         };
 
         function link(scope, elem) {
-            return $templateRequest('navbar-fi.html')
+            var templateUrl;
+            if ($location.host() === 'www.norssit.fi') {
+                templateUrl = '/navbar-fi.html';
+            } else {
+                templateUrl = 'navbar-fi.html';
+            }
+            return $templateRequest(templateUrl)
             .then(function(template) {
                 elem.html(template);
                 return $templateRequest('views/subnavbar.html');

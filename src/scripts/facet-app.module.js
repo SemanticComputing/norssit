@@ -26,11 +26,17 @@
     })
 
     .config(function($urlRouterProvider){
-        $urlRouterProvider.otherwise('/lista');
+        $urlRouterProvider.otherwise('/ruudukko');
     })
 
     .config(function($stateProvider) {
         $stateProvider
+        .state('detail', {
+            url: '/tiedot/:personId',
+            templateUrl: 'views/norssit.detail.html',
+            controller: 'DetailController',
+            controllerAs: 'vm'
+        })
         .state('table', {
             url: '/lista',
             templateUrl: 'views/norssit.table.html',
@@ -43,13 +49,16 @@
             controller: 'CardsController',
             controllerAs: 'vm'
         })
-        .state('visu', {
+        .state('visualizations', {
+            abstract: true
+        })
+        .state('visualizations.visu', {
             url: '/visualisointi',
             templateUrl: 'views/norssit.visu.html',
             controller: 'VisuController',
             controllerAs: 'vm'
         })
-        .state('visu2', {
+        .state('visualizations.visu2', {
             url: '/visualisointi2',
             templateUrl: 'views/norssit.visu2.html',
             controller: 'VisuController2',

@@ -34,6 +34,14 @@ a.no-style {
   padding: 2px;
 }
 
+.person-img {
+  display: inline-block;
+}
+
+.padded-row {
+  padding-top: 10px;
+}
+
 .navbar-brand {
   font-size: inherit;
 }

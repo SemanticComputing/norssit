@@ -11,12 +11,12 @@
   <tbody>
   <tr ng-show="!vm.isLoadingResults" ng-repeat="person in $data">
     <td class="person-image-container" data-title="'Nimi'">
-      <div ng-class="::{ 'name-col col-md-12 col-lg-7': person.image }">
-        <b>{{ ::person.registerNumber }}. {{ ::person.givenName }} {{ ::person.familyName }}</b><br />
-        {{ ::person.birthPlace }}
+      <div ng-class="::{ 'name-col col-md-12 col-lg-7': person.images }">
+        <b><a ui-sref="detail({ personId: person.id })">{{ ::person.registerNumber }}. {{ ::person.givenName }} {{ ::person.familyName }}</a></b><br />
+        &#8727;&nbsp;{{ ::person.birthPlace }}
         <span ng-if="::(person.birthDate || person.deathDate)">
           {{ ::person.birthDate || '?' | date:'dd.MM.yyyy' }}
-          <span ng-if=::person.deathDate>- {{ ::person.deathDate | date:'dd.MM.yyyy' }}</span>
+          <span ng-if=::person.deathDate>&dagger;&nbsp;{{ ::person.deathDate | date:'dd.MM.yyyy' }}</span>
           <br />
         </span>
         <span class="icon-menu">
@@ -24,8 +24,8 @@
           <a title="Data" class="" ng-href="{{ ::person.id }}"><span class="glyphicon glyphicon-hdd" aria-hidden="true"></span></a>
         </span>
       </div>
-      <div ng-if=::"person.image" class="name-col col-md-12 col-lg-5">
-        <div ng-repeat="img in ::vm.toArray(person.image)"
+      <div ng-if="::person.hasImage" class="name-col col-md-12 col-lg-5">
+        <div ng-repeat="img in ::person.images"
           ng-class="{ 'col-md-12': ($first && $last), 'col-sm-6': !($first && $last) }" class="person-img-col vcenter">
           <img uib-popover-template="'views/profile-image-popover.html'"
             popover-trigger="'mouseenter'"
@@ -37,7 +37,7 @@
       </div>
     </td>
     <td data-title="'Norssi'">
-      {{ ::person.enrollmentYear || '?' }} - {{ ::person.matriculationYear || '?' }}
+      {{ ::person.enrollmentYear || '?' }} &ndash; {{ ::person.matriculationYear || '?' }}
     </td>
     <td class="links" data-title="'Linkit'">
       <div ng-if="::person.achievement">
@@ -61,8 +61,8 @@
     <td data-title="'Muuta'">
       <div ng-if="::person.relative">
       	<span>Sukulaiset: </span><br>
-      	<span ng-repeat="relative in vm.toArray(person.relative)">
-      		{{ ::relative.type }}<a ng-href="{{ ::relative.id }}"> {{ ::relative.name }}</a><br>
+      	<span ng-repeat="relative in person.relative | castArray">
+          {{ ::relative.type }} <a ui-sref="detail({ personId: relative.id })">{{ ::relative.name }}</a>
       	</span>
       </div>
       <button class="page-btn visible-xs-block visible-sm-block btn btn-default" ng-click="::vm.openPage(person)">Matrikkelisivu</button>
