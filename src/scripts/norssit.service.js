@@ -190,9 +190,7 @@
         '  OPTIONAL { ?id norssit:register_id ?registerNumber . } ' +
         '  OPTIONAL { ?id schema:birthDate ?birthDate . }' +
         '  OPTIONAL { ?id schema:deathDate ?deathDate . }' +
-        '  OPTIONAL { ' +
-        '   ?id schema:hobby/skos:prefLabel ?hobby . ' +
-        '  }' +
+        '  OPTIONAL { ?id schema:hobby/skos:prefLabel ?hobby . }' +
         '  OPTIONAL { ?id schema:image ?images . }' +
         '  OPTIONAL { ?id dct:description ?description . }' +
         '  OPTIONAL { ?id person_registry:pageNumber ?pageNumber . }' +
