@@ -211,13 +211,13 @@
 	    	'    SELECT ?class (count (distinct ?id) AS ?no) ' +
 	    	'    WHERE { ' +
 	    	'      ?class rdfs:subClassOf+ bioc:Title . ' +
-	    	'      ?evt a ?class ; ' +
+	    	'      ?evt bioc:relates_to_title ?class ; ' +
 	    	'           bioc:title_inheres_in ?id . ' +
 	    	'        { <RESULT_SET> } ' +
 	    	'    } GROUP BY ?class ORDER BY desc(?no) LIMIT 5 ' +
 	    	'    } ' +
 	    	'    ?class skos:prefLabel ?label . ' +
-	    	'    ?evt a ?class ; ' +
+	    	'    ?evt bioc:relates_to_title ?class ; ' +
 	    	'         bioc:title_inheres_in ?id ; ' +
 	    	'         schema:startDate ?date . ' +
 	    	'    { <RESULT_SET> } ' +
@@ -288,7 +288,8 @@
         }
         
         function getResultsTopTitles(facetSelections) {
-        	return endpoint.getObjectsNoGrouping(queryTopTitles.replace(/<RESULT_SET>/g, facetSelections.constraint.join(' ')));
+        	var q = queryTopTitles.replace(/<RESULT_SET>/g, facetSelections.constraint.join(' '));
+        	return endpoint.getObjectsNoGrouping(q);
         }
 
         function getResultsTopOrgs(facetSelections) {

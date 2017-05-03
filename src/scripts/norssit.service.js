@@ -123,7 +123,7 @@
             },
             occupation: {
                 facetId: 'occupation',
-                predicate: '^<http://ldf.fi/schema/bioc/title_inheres_in>/a',
+                predicate: '^<http://ldf.fi/schema/bioc/title_inheres_in>/<http://ldf.fi/schema/bioc/relates_to_title>',
                 name: 'Arvo tai ammatti',
                 enabled: true
             },
@@ -211,7 +211,7 @@
         '  OPTIONAL { ?id norssit:genitree ?genitree . }' +
         '  OPTIONAL { ?id norssit:genicom ?genicom . }' +
         '  OPTIONAL { ?id norssit:sls_biografi ?blf . }' +
-        '  OPTIONAL { ?id ^bioc:title_inheres_in/a/skos:prefLabel ?occupation . FILTER (str(?occupation)!="Nimike") }' +
+        '  OPTIONAL { ?id ^bioc:title_inheres_in/bioc:relates_to_title/skos:prefLabel ?occupation . }' +
         '  OPTIONAL { ?id ^bioc:title_inheres_in/bioc:relates_to/skos:prefLabel ?organization . }' +
         '  OPTIONAL { ' +
         '  	?id bioc:has_family_relation [' +
