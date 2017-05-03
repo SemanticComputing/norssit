@@ -15,7 +15,7 @@
 
         function link(scope, elem) {
             var templateUrl;
-            if ($location.host === 'norssit.fi') {
+            if ($location.host() === 'norssit.fi') {
                 templateUrl = '/navbar-fi.html';
             } else {
                 templateUrl = 'navbar-fi.html';
