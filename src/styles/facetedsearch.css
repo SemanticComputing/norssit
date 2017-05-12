@@ -132,3 +132,9 @@ a.no-style {
 .norssi-slogan {
   font-weight: bold;
 }
+
+.expanded-facet .facet-wrapper {
+  min-width: 500px;
+  position: relative;
+  z-index: 9999;
+}

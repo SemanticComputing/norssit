@@ -17,7 +17,9 @@
     <seco-basic-facet data-options="vm.facets.birthPlace"></seco-basic-facet>
     <seco-basic-facet data-options="vm.facets.enrollmentYear"></seco-basic-facet>
     <seco-basic-facet data-options="vm.facets.matriculationYear"></seco-basic-facet>
-    <seco-basic-facet data-options="vm.facets.medal"></seco-basic-facet>
+    <seco-basic-facet ng-class="{'expanded-facet': expandMedals}"
+      ng-mouseover="expandMedals = true" ng-mouseleave="expandMedals = false"
+      data-options="vm.facets.medal"></seco-basic-facet>
     <seco-basic-facet data-options="vm.facets.rank"></seco-basic-facet>
      </div>
 </div>
