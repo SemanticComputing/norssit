@@ -25,8 +25,11 @@
         $urlMatcherFactoryProvider.strictMode(false);
     })
 
-    .config(function($urlRouterProvider){
-        $urlRouterProvider.otherwise('/ruudukko');
+    .config(function($urlRouterProvider, $windowProvider){
+        $urlRouterProvider.when('', '/ruudukko');
+        $urlRouterProvider.otherwise(function() {
+            $windowProvider.$get().location = 'http://www.norssit.fi';
+        });
     })
 
     .config(function($stateProvider) {
