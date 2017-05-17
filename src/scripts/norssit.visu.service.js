@@ -137,6 +137,12 @@
                 name: 'Työpaikka tai oppilaitos',
                 enabled: true
             },
+            gender: {
+                facetId: 'gender',
+                predicate: '<http://schema.org/gender>',
+                name: 'Sukupuoli',
+                enabled: true
+            },
             hobby: {
                 facetId: 'hobby',
                 predicate: '<http://schema.org/hobby>',

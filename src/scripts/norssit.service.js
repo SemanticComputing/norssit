@@ -139,6 +139,12 @@
                 name: 'Työpaikka tai oppilaitos',
                 enabled: true
             },
+            gender: {
+                facetId: 'gender',
+                predicate: '<http://schema.org/gender>',
+                name: 'Sukupuoli',
+                enabled: true
+            },
             hobby: {
                 facetId: 'hobby',
                 predicate: '<http://schema.org/hobby>',
@@ -190,6 +196,7 @@
         '  OPTIONAL { ?id norssit:register_id ?registerNumber . } ' +
         '  OPTIONAL { ?id schema:birthDate ?birthDate . }' +
         '  OPTIONAL { ?id schema:deathDate ?deathDate . }' +
+        '  OPTIONAL { ?id schema:gender ?gender . }' +
         '  OPTIONAL { ?id schema:hobby/skos:prefLabel ?hobby . }' +
         '  OPTIONAL { ?id schema:image ?images . }' +
         '  OPTIONAL { ?id dct:description ?description . }' +
