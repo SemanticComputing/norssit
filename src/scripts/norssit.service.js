@@ -129,7 +129,7 @@
             },
             education: {
                 facetId: 'education',
-                predicate: '^<http://ldf.fi/schema/bioc/education_inheres_in>/a',
+                predicate: '^<http://ldf.fi/schema/bioc/education_inheres_in>/<http://ldf.fi/schema/bioc/relates_to_title>',
                 name: 'Koulutus',
                 enabled: true
             },

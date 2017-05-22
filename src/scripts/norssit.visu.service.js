@@ -121,19 +121,19 @@
             },
             occupation: {
                 facetId: 'occupation',
-                predicate: '^<http://ldf.fi/schema/bioc/title_inheres_in>/a',
+                predicate: '^<http://ldf.fi/schema/bioc/title_inheres_in>/<http://ldf.fi/schema/bioc/relates_to_title>',
                 name: 'Arvo tai ammatti',
                 enabled: true
             },
             education: {
                 facetId: 'education',
-                predicate: '^<http://ldf.fi/schema/bioc/education_inheres_in>/a',
+                predicate: '^<http://ldf.fi/schema/bioc/education_inheres_in>/<http://ldf.fi/schema/bioc/relates_to_title>',
                 name: 'Koulutus',
                 enabled: true
             },
             organization: {
                 facetId: 'organization',
-                predicate: '^<http://ldf.fi/schema/bioc/title_inheres_in>/<http://ldf.fi/schema/bioc/relates_to>',
+                predicate: '^(<http://ldf.fi/schema/bioc/title_inheres_in>|<http://ldf.fi/schema/bioc/education_inheres_in>)/<http://ldf.fi/schema/bioc/relates_to>',
                 name: 'Työpaikka tai oppilaitos',
                 enabled: true
             },
@@ -187,13 +187,13 @@
         	' SELECT distinct ?occupation ?education ?organization ?eduorganization ?id ' +
             '  WHERE {' +
             '  	 { <RESULT_SET> } ' +
-        	'  { ?evt bioc:education_inheres_in ?id ; a/skos:prefLabel ?education . ' +
+        	'  { ?evt bioc:education_inheres_in ?id ; bioc:relates_to_title/skos:prefLabel ?education . ' +
         	'    OPTIONAL { ?evt bioc:relates_to ?org .' +
         	'	 	?org a schema:EducationalOrganization ; skos:prefLabel ?eduorganization }' +
         	'  }' +
         	'  UNION' +
-        	'  { ?evt bioc:title_inheres_in ?id ' +
-        	'     ; a ?cls .' +
+        	'  { ?evt bioc:title_inheres_in ?id ;' +
+        	'     	bioc:relates_to_title ?cls .' +
         	'    FILTER (?cls != bioc:Title)' +
         	'    ?cls skos:prefLabel ?occupation .' +
         	'    OPTIONAL { ?evt bioc:relates_to/skos:prefLabel ?organization }' +
