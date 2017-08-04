@@ -218,20 +218,28 @@
         '  OPTIONAL { ?id norssit:genitree ?genitree . }' +
         '  OPTIONAL { ?id norssit:genicom ?genicom . }' +
         '  OPTIONAL { ?id norssit:sls_biografi ?blf . }' +
-        '  OPTIONAL { ?id ^bioc:title_inheres_in/bioc:relates_to_title/skos:prefLabel ?occupation . }' +
-        '  OPTIONAL { ?id ^bioc:title_inheres_in/bioc:relates_to/skos:prefLabel ?organization . }' +
+        '  OPTIONAL { ?id ^bioc:title_inheres_in ?title . ' +
+        '   OPTIONAL { ?title bioc:relates_to_title/skos:prefLabel ?occupation . }' +
+        '   OPTIONAL { ?title bioc:relates_to/skos:prefLabel ?organization . }' +
+        '  } ' +
         '  OPTIONAL { ' +
         '  	?id bioc:has_family_relation [' +
         '    	bioc:inheres_in ?relative__id ;' +
-        '      	a/skos:prefLabel ?relative__type ] .' +
-        '    	FILTER (LANG(?relative__type)="fi")' +
-        '    	?relative__id schema:familyName ?relative__familyName ; schema:givenName ?relative__givenName .' +
-        '		BIND (replace(concat(?relative__givenName," ",?relative__familyName),"[(][^)]+[)]\s*","") AS ?relative__name) ' +
+        '      	a ?relative__type_id '+
+        '   ] .' +
+        '   GRAPH <http://ldf.fi/norssit/bioc> { ?relative__type_id skos:prefLabel ?relative__type . } ' +
+        '   FILTER (LANG(?relative__type)="fi")' +
+        '   ?relative__id schema:familyName ?relative__familyName ; schema:givenName ?relative__givenName .' +
+        '	BIND (replace(concat(?relative__givenName," ",?relative__familyName),"[(][^)]+[)]\\\\s*","") AS ?relative__name) ' +
         '  }' +
-        '  BIND(EXISTS { ' +
-        '   ?ach rdfs:subPropertyOf* nach:involved_in . ' +
-        '   ?id ?ach ?achievement__id . ' +
-        '  } AS ?hasAchievements) ' +
+        '  { ' +
+        '   SELECT DISTINCT ?id ?hasAchievements { ' +
+        '    BIND(EXISTS { ' +
+        '     ?ach rdfs:subPropertyOf* nach:involved_in . ' +
+        '     ?id ?ach ?achievement__id . ' +
+        '    } AS ?hasAchievements) ' +
+        '   }' +
+        '  }' +
         ' }';
 
         var achievementQuery = prefixes +
