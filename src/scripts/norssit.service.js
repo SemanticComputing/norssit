@@ -232,12 +232,11 @@
         '   ?relative__id schema:familyName ?relative__familyName ; schema:givenName ?relative__givenName .' +
         '	BIND (replace(concat(?relative__givenName," ",?relative__familyName),"[(][^)]+[)]\\\\s*","") AS ?relative__name) ' +
         '  }' +
-        '  { ' +
+        '  OPTIONAL { ' +
         '   SELECT DISTINCT ?id ?hasAchievements { ' +
-        '    BIND(EXISTS { ' +
-        '     ?ach rdfs:subPropertyOf* nach:involved_in . ' +
-        '     ?id ?ach ?achievement__id . ' +
-        '    } AS ?hasAchievements) ' +
+        '    ?ach rdfs:subPropertyOf* nach:involved_in . ' +
+        '    ?id ?ach ?achievement__id . ' +
+        '    BIND(true AS ?hasAchievements) ' +
         '   }' +
         '  }' +
         ' }';
