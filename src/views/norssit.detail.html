@@ -22,8 +22,8 @@
               <div class="col-xs-12">
                 <p ng-if="(vm.person.birthPlace || vm.person.birthDate || vm.person.deathDate)">
                 &#8727;&nbsp;<span ng-if="vm.person.birthPlace">{{ vm.person.birthPlace }}</span>
-                {{ vm.person.birthDate | date:'dd.MM.yyyy' }}
-                <span ng-if=vm.person.deathDate>&dagger;&nbsp;{{ vm.person.deathDate | date:'dd.MM.yyyy' }}</span>
+                {{ vm.person.birthDate | dateOrYear:'dd.MM.yyyy' }}
+                <span ng-if=vm.person.deathDate>&dagger;&nbsp;{{ vm.person.deathDate | dateOrYear:'dd.MM.yyyy' }}</span>
                 </p>
               </div>
               <div class="col-xs-12">

@@ -15,8 +15,8 @@
         <b><a ui-sref="detail({ personId: person.id })">{{ ::person.registerNumber }}. {{ ::person.givenName }} {{ ::person.familyName }}</a></b><br />
         &#8727;&nbsp;{{ ::person.birthPlace }}
         <span ng-if="::(person.birthDate || person.deathDate)">
-          {{ ::person.birthDate || '?' | date:'dd.MM.yyyy' }}
-          <span ng-if=::person.deathDate>&dagger;&nbsp;{{ ::person.deathDate | date:'dd.MM.yyyy' }}</span>
+          {{ ::person.birthDate || '?' | dateOrYear:'dd.MM.yyyy' }}
+          <span ng-if=::person.deathDate>&dagger;&nbsp;{{ ::person.deathDate | dateOrYear:'dd.MM.yyyy' }}</span>
           <br />
         </span>
         <span class="icon-menu">
